@@ -1,82 +1,55 @@
 import React from 'react';
-import HomePage from '../Screens/HomePage';
-import LoginPage from '../Screens/LoginPage';
-import UserProfile from '../Screens/UserProfile';
-import SearchPage from '../Screens/SearchPage';
-import HistoryPage from '../Screens/HistoryPage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather } from '@expo/vector-icons';
 
-
-/*
-/In order to see whatever new screen you're working on, you need to add it here.
-/Import the screen at the top of the file, then add it down below.
-/If you google feather icons in react native, you can find a list of icons to use if you want to be special :)
-*/
-
-
+// Import your screens here
+import HomePage from '../Screens/HomePage';
+import UserProfile from '../Screens/UserProfile';
+import SearchPage from '../Screens/SearchPage';
+import HistoryPage from '../Screens/HistoryPage';
+import LoginPage from '../Screens/LoginPage';
 
 const Tab = createBottomTabNavigator();
 
-const Tabs = () => {
+// Define an array of tab screens with their respective components and icon names
+const TabScreens = [
+  { name: 'Home', component: HomePage, iconName: 'home' },
+  { name: 'Profile', component: UserProfile, iconName: 'user' },
+  { name: 'Search', component: SearchPage, iconName: 'search' },
+  { name: 'History', component: HistoryPage, iconName: 'dollar-sign' },
+  { name: 'Login', component: LoginPage, iconName: 'log-out' },
+];
+
+// Define the TabNavigator component that renders the bottom tab navigation
+const TabNavigator = () => {
   return (
-    //<NavigationContainer>
-
-        <Tab.Navigator 
-        initialRouteName="Logout"
+      <Tab.Navigator 
+        initialRouteName="Login" 
         screenOptions={{
-            tabBarActiveTintColor: 'blue',
-            tabBarInactiveTintColor: 'gray'
-        }}>
-            <Tab.Screen name="Home" component={HomePage} options={{
-                headerShown: false,
-                tabBarIcon: ({ focused }) => (
-                    <Feather 
-                        name={'home'}
-                        size={25}
-                        color={focused ? 'orange' : 'black'} />)
-            }}/>
-            <Tab.Screen name="Profile" component={UserProfile} options={{
-                headerShown: false,
-                tabBarIcon: ({ focused }) => (
-                    <Feather 
-                        name={'user'}
-                        size={25}
-                        color={focused ? 'orange' : 'black'} />)
-            
-            }} />
-            <Tab.Screen name="Search" component={SearchPage} options={{
-                headerShown: false,
-                tabBarIcon: ({ focused }) => (
-                    <Feather 
-                        name={'search'}
-                        size={25}
-                        color={focused ? 'orange' : 'black'} />)
-            
-            }} />
-            <Tab.Screen name="History" component={HistoryPage} options={{
-                headerShown: false,
-                tabBarIcon: ({ focused }) => (
-                    <Feather 
-                        name={'dollar-sign'}
-                        size={25}
-                        color={focused ? 'orange' : 'black'} />)
-            
-            }} />
-            <Tab.Screen name="Logout" component={LoginPage} options={{
-                headerShown: false,
-                tabBarIcon: ({ focused }) => (
-                    <Feather 
-                        name={'log-out'}
-                        size={25}
-                        color={focused ? 'orange' : 'black'} />)
-            
-            }} />
-            
-        </Tab.Navigator>
-    //</NavigationContainer>
+          // Additional tabBar options can be added here if needed
+        }}
+      >
+        {/* Dynamically generate Tab.Screen components based on TabScreens array */}
+        {TabScreens.map((screen, index) => (
+          <Tab.Screen
+            key={index} 
+            name={screen.name} 
+            component={screen.component} 
+            options={({ route }) => ({
+              tabBarIcon: ({ focused, color, size }) => (
+                <Feather 
+                  name={screen.iconName} 
+                  size={25} 
+                  color={focused ? 'orange' : 'black'} 
+                />
+              ),
+              headerShown: false, 
+            })}
+          />
+        ))}
+      </Tab.Navigator>
   );
-}
+};
 
-export default Tabs;
+export default TabNavigator;

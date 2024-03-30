@@ -2,6 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather } from '@expo/vector-icons';
+import AuthStack from './AuthStack'; // Import your AuthStack
 
 // Import your screens here
 import HomePage from '../Screens/HomePage';
@@ -18,14 +19,14 @@ const TabScreens = [
   { name: 'Profile', component: UserProfile, iconName: 'user' },
   { name: 'Search', component: SearchPage, iconName: 'search' },
   { name: 'History', component: HistoryPage, iconName: 'dollar-sign' },
-  { name: 'Login', component: LoginPage, iconName: 'log-out' },
+  { name: 'Auth', component: AuthStack, iconName: 'log-in' }, // Use AuthStack as a tab screen
 ];
 
 // Define the TabNavigator component that renders the bottom tab navigation
 const TabNavigator = () => {
   return (
       <Tab.Navigator 
-        initialRouteName="Login" 
+        initialRouteName="Auth" 
         screenOptions={{
           // Additional tabBar options can be added here if needed
         }}

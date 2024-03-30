@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { StatusBar, StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -10,6 +12,7 @@ export default function LoginPage({ navigation}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showCreateAccount, setShowCreateAccount] = useState(false);
 
   //function is called when login button it pressed
   function handleLogin({}) {
@@ -18,7 +21,10 @@ export default function LoginPage({ navigation}) {
     console.log('Logging in with email:', email, 'and password:', password);
   };  
 
+  
+
   function handleAccount({}) {
+    navigation.navigate('CreateAccountPage') // Navigate to CreateAccountPage
 
   }
 

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { ScrollView, View, Text, TextInput, Picker, CheckBox, Switch, Button, StyleSheet } from 'react-native';
 import moment from 'moment-timezone';
+import StarRating from './StarRating'; // Import your StarRating component
 
 const HistoryPage = () => {
-  
   const [incomeType, setIncomeType] = useState('daily');
-
   const [shifts, setShifts] = useState([
     { id: 1, date: moment.tz('2023-11-05', 'UTC'), hoursWorked: 8, moneyEarned: 100 },
     { id: 2, date: moment.tz('2023-11-17', 'UTC'), hoursWorked: 7, moneyEarned: 100 },
@@ -29,6 +28,14 @@ const HistoryPage = () => {
   //handler for button clicks to update what income type is
   const handleIncomeTypeChange = (type) => {
     setIncomeType(type);
+  };
+
+  const handleRateShift = (shiftId, rating) => {
+    // Update the rating of the shift with shiftId
+    const updatedShifts = shifts.map((shift) =>
+      shift.id === shiftId ? { ...shift, rating } : shift
+    );
+    setShifts(updatedShifts);
   };
 
   const calculateIncome = () => {
@@ -88,14 +95,24 @@ const HistoryPage = () => {
           <Button color="orange" title="Yearly" onPress={() => handleIncomeTypeChange('yearly')} />
         </View>
       </View>
-      {shifts.map((shift) => (
-        <View key={shift.id} style={styles.shiftContainer}>
-          <Text style={styles.shiftLabel}>Shift {shift.id}</Text>
-          <Text>Date: {shift.date.format('YYYY-MM-DD')}</Text>
-          <Text>Hours Worked: {shift.hoursWorked}</Text>
-          <Text>Money Earned: ${shift.moneyEarned}</Text>
-        </View>
-      ))}
+
+      {shifts.length > 0 ? (
+        shifts.map((shift) => (
+          <View key={shift.id} style={styles.shiftContainer}>
+            <Text style={styles.shiftLabel}>Shift {shift.id}</Text>
+            <Text>Date: {shift.date.format('YYYY-MM-DD')}</Text>
+            <Text>Hours Worked: {shift.hoursWorked}</Text>
+            <Text>Money Earned: ${shift.moneyEarned}</Text>
+            <Text>Rating:</Text>
+            <StarRating
+              rating={shift.rating}
+              onRate={(rating) => handleRateShift(shift.id, rating)}
+            />
+          </View>
+        ))
+      ) : (
+        <Text style={styles.emptyState}>No shifts available.</Text>
+      )}
     </ScrollView>
   );
 };

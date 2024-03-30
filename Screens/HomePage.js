@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Image, Text, View, TouchableOpacity, FlatList, Modal } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from Expo vector icons
+
 import { LinearGradient } from "expo-linear-gradient";
 
 export default function HomePage() {
@@ -24,6 +26,8 @@ export default function HomePage() {
     function generateJobs() {
         const generatedJobs = [];
         for (let i = 1; i <= 10; i++) {
+            const rating = (Math.random() * 4 + 1).toFixed(1); // Generate a random rating between 1.0 and 5.0 with one decimal point
+
             generatedJobs.push({
                 name: `Job${i}`,
                 key: `${i}`,
@@ -32,6 +36,8 @@ export default function HomePage() {
                 distance: `Distance from you: ${i * i} miles`,
                 datetime: `When: March ${i}, 2024, ${8 + i}:00 AM`,
                 desc: 'Description of shift: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+                rating: rating, // Add the random rating to each job
+
             });
         }
         return generatedJobs;
@@ -81,11 +87,14 @@ export default function HomePage() {
                             source={require('../assets/rest_icon.png')}
                             style={styles.image}
                         />
-                        <Text>{selectedJob?.restaurant}</Text>
+                        <Text style={styles.restaurant}>{selectedJob?.restaurant}</Text>
+                        <View style={styles.ratingContainer}>
+                            <Ionicons name="star" size={20} color="#f1c40f" style={styles.starIcon} />
+                            <Text style={styles.ratingText}>{selectedJob?.rating}</Text>
+                        </View>
                         <Text>{selectedJob?.pay}</Text>
                         <Text>{selectedJob?.distance}</Text>
                         <Text>{selectedJob?.datetime}</Text>
-                        <Text></Text>
                         <Text>{selectedJob?.desc}</Text>
                         <Text>testing text</Text>
                         <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
@@ -135,6 +144,21 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         fontSize: 18,
     },
+    restaurant: {
+        fontWeight: 'bold',
+        fontSize: 24,
+    },
+    ratingContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10,
+      },
+      starIcon: {
+        marginRight: 5,
+      },
+      ratingText: {
+        fontSize: 16,
+      },
     favoriteButton: {
         position: 'absolute',
         top: 5,

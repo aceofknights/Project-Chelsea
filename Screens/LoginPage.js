@@ -18,6 +18,10 @@ export default function LoginPage({ navigation}) {
     console.log('Logging in with email:', email, 'and password:', password);
   };  
 
+  function handleAccount({}) {
+
+  }
+
    // this looks different but this is just another way to do a function it works just like the one above but is called when forgot email is clicked
   const handleForgotEmail = () => {
     Alert.alert('Forgot Email', 'Please contact support for assistance with your email.');
@@ -75,7 +79,9 @@ export default function LoginPage({ navigation}) {
         <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
           <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
-
+        <TouchableOpacity style={styles.accountButton} onPress={handleAccount}>
+          <Text style={styles.accountButtonText}>Create Account</Text>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.forgotButton} onPress={handleForgotEmail}>
           <Text style={styles.forgotButtonText}>Forgot Email</Text>
         </TouchableOpacity>
@@ -136,6 +142,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   loginButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  accountButton: {
+    backgroundColor: 'orange',
+    borderRadius: 5,
+    paddingVertical: 10,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  accountButtonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',

@@ -103,7 +103,7 @@ export default function LoginPage({ navigation}) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FEF4F0', // seashell
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: '#007bff',
+    color: '#0e4fdb', //byzantine blue
   },
   inputContainer: {
     width: '80%',
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#331507', //black bean even tho its brown
     borderRadius: 5,
     paddingHorizontal: 10,
     paddingVertical: 8,
@@ -141,26 +141,26 @@ const styles = StyleSheet.create({
     transform: [{ translateY: -12 }],
   },
   loginButton: {
-    backgroundColor: 'orange',
+    backgroundColor: '#ef8833',
     borderRadius: 5,
     paddingVertical: 10,
     alignItems: 'center',
     marginBottom: 10,
   },
   loginButtonText: {
-    color: '#fff',
+    color: '#331507',
     fontSize: 16,
     fontWeight: 'bold',
   },
   accountButton: {
-    backgroundColor: 'orange',
+    backgroundColor: '#ef8833',
     borderRadius: 5,
     paddingVertical: 10,
     alignItems: 'center',
     marginBottom: 10,
   },
   accountButtonText: {
-    color: '#fff',
+    color: '#331507',
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -169,20 +169,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   forgotButtonText: {
-    color: '#007bff',
+    color: '#0e4fdb',
     fontSize: 16,
-  },
-  profileButton: {
-    backgroundColor: '#007bff',
-    borderRadius: 5,
-    paddingVertical: 10,
-    alignItems: 'center',
-    marginBottom: 10,
-  },
-  profileButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
 });
 

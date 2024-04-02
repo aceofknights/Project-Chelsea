@@ -61,10 +61,10 @@ export default function HomePage() {
                     renderItem={({ item }) => (
                         <TouchableOpacity key={item.key} onPress={() => pressHandler(item)} style={styles.item}>
                             <Text style={styles.jobName}>{item.name}</Text>
-                            <Text>{item.restaurant}</Text>
-                            <Text>{item.pay}</Text>
-                            <Text>{item.distance}</Text>
-                            <Text>{item.datetime}</Text>
+                            <Text style={styles.text}>{item.restaurant}</Text>
+                            <Text style={styles.text}>{item.pay}</Text>
+                            <Text style={styles.text}>{item.distance}</Text>
+                            <Text style={styles.text}>{item.datetime}</Text>
                             
                             <TouchableOpacity onPress={() => favoriteHandler(item.key)} style={styles.favoriteButton}>
                                 <Text style={styles.favoriteButtonText}>Favorite</Text>
@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingHorizontal: 20,
         marginHorizontal: 20,
+        backgroundColor: '#fef4f0',
     },
     image: {
         width: 200, // Set the desired width
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
         padding: 30,
         fontSize: 24,
         textAlign: 'center',
-        backgroundColor: "orange",
+        backgroundColor: "#ef8833",
         position: 'relative', // Added to position the favorite button
         borderRadius: 20,
     },
@@ -143,22 +144,27 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 10,
         fontSize: 18,
+        color: '#331506',
+    },
+    text: {
+        color: '#331507',
     },
     restaurant: {
         fontWeight: 'bold',
         fontSize: 24,
+        color: '#331506',
     },
     ratingContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 10,
-      },
-      starIcon: {
+    },
+    starIcon: {
         marginRight: 5,
-      },
-      ratingText: {
+    },
+    ratingText: {
         fontSize: 16,
-      },
+    },
     favoriteButton: {
         position: 'absolute',
         top: 5,
@@ -168,7 +174,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     favoriteButtonText: {
-        color: '#fff',
+        color: '#331507',
     },
     modalView: {
         flex: 1,

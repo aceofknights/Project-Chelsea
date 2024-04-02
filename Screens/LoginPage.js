@@ -42,11 +42,6 @@ export default function LoginPage({ navigation}) {
 
   };
 
-  const goToProfileForNow = () => {
-    
-    console.log('Profile', 'You are now on your profile page.');
-  };
-
 
   //the <view></view> tags work just like <div></div> tags in html
   //wrapping items in view tags and giving them a style make them easy to add style to
@@ -141,7 +136,7 @@ const styles = StyleSheet.create({
     transform: [{ translateY: -12 }],
   },
   loginButton: {
-    backgroundColor: '#ef8833',
+    backgroundColor: '#ef8833', //orange
     borderRadius: 5,
     paddingVertical: 10,
     alignItems: 'center',

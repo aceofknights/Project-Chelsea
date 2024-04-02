@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather } from '@expo/vector-icons';
-import AuthStack from './AuthStack'; // Import your AuthStack
+import AuthStack from './AuthStack'; 
 
 // Import your screens here
 import HomePage from '../Screens/HomePage';

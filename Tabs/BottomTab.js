@@ -19,14 +19,14 @@ const TabScreens = [
   { name: 'Profile', component: UserProfile, iconName: 'user' },
   { name: 'Search', component: SearchPage, iconName: 'search' },
   { name: 'History', component: HistoryPage, iconName: 'dollar-sign' },
-  { name: 'Auth', component: AuthStack, iconName: 'log-in' }, // Use AuthStack as a tab screen
+  { name: 'Log-out', component: AuthStack, iconName: 'log-in' }, // Use AuthStack as a tab screen
 ];
 
 // Define the TabNavigator component that renders the bottom tab navigation
 const TabNavigator = () => {
   return (
       <Tab.Navigator 
-        initialRouteName="Auth" 
+        initialRouteName="Log-out" 
         screenOptions={{
           // Additional tabBar options can be added here if needed
         }}

@@ -9,7 +9,7 @@ const Stack = createStackNavigator();
 const AuthStack = () => (
   <Stack.Navigator initialRouteName="Login" headerMode="none">
     <Stack.Screen name="Login" component={LoginPage} />
-    <Stack.Screen name="CreateAccount" component={CreateAccountPage} />
+    <Stack.Screen name="CreateAccount" headerMode="none" component={CreateAccountPage} />
   </Stack.Navigator>
 );
 

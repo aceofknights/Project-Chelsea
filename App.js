@@ -2,6 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Tabs from './Tabs/BottomTab'; // Assuming Tabs contains the bottom tab navigator
+import 'react-native-gesture-handler';
 
 // Import your screens here
 import CreateAccountPage from './Screens/createAccountPage';

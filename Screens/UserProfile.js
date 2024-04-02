@@ -108,6 +108,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: '#fef4fo',
   },
   header: {
     flexDirection: 'row',
@@ -125,20 +126,21 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     marginRight: 10,
     borderWidth: 2,
-    borderColor: '#ccc',
+    borderColor: '#331507',
   },
   name: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: '#331507',
   },
   editButton: {
     paddingVertical: 8,
     paddingHorizontal: 15,
-    backgroundColor: 'orange',
+    backgroundColor: '#ef8833',
     borderRadius: 5,
   },
   editButtonText: {
-    color: '#fff',
+    color: '#331507',
     fontSize: 16,
   },
   saveButton: {
@@ -148,12 +150,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   saveButtonText: {
-    color: '#fff',
+    color: '#331507',
     fontSize: 16,
   },
   section: {
-    backgroundColor: '#bcc3cf',
-    backgroundColor: 'orange',
+    backgroundColor: '#ef8833',
     padding: 10,
     borderRadius: 5,
     marginBottom: 10,
@@ -162,14 +163,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 5,
+    color: '#331507',
+
   },
   infoText: {
     fontSize: 16,
     marginBottom: 5,
+    color: '#331507',
+
   },
   certificationText: {
     fontSize: 16,
     marginBottom: 5,
+    color: '#331507',
+
   },
   certificationInput: {
     borderWidth: 1,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Image, Text, View, TouchableOpacity, FlatList, Modal } from 'react-native';
+import { StyleSheet, Image, Text, View, TouchableOpacity, FlatList, Modal, ToastAndroid  } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from Expo vector icons
 
 import { LinearGradient } from "expo-linear-gradient";
@@ -7,6 +7,8 @@ import { LinearGradient } from "expo-linear-gradient";
 export default function HomePage() {
     const [jobs, setJobs] = useState(generateJobs());
     const [selectedJob, setSelectedJob] = useState(null);
+    const [favorites, setFavorites] = useState([]);
+    const [showFavorites, setShowFavorites] = useState(false);
 
     const pressHandler = (job) => {
         setSelectedJob(job);
@@ -14,9 +16,25 @@ export default function HomePage() {
 
     };
 
+
     const favoriteHandler = (key) => {
-        console.log("YOU FAVORITE THIS JOB THANK YOU VERY MUCH, JOB NUMBER: " + key);
-    }
+        const job = jobs.find((item) => item.key === key);
+        if (job) {
+            const isFavorite = favorites.some((item) => item.key === key);
+            if (isFavorite) {
+                setFavorites(favorites.filter((item) => item.key !== key));
+            } else {
+                setFavorites([...favorites, job]);
+                showToast('Added to Favorites'); // Show a toast message
+
+            }
+        }
+    };
+ 
+    // Function to show toast message
+    const showToast = (message) => {
+        ToastAndroid.show(message, ToastAndroid.SHORT);
+    };    
 
     const closeModal = () => {
         setSelectedJob(null);
@@ -47,70 +65,92 @@ export default function HomePage() {
         setJobs(generateJobs());
     };
 
-    return (
-        // <LinearGradient colors={['red', 'yellow', 'green', 'blue', 'purple']} style={styles.linearGradient}>
-            <View style={styles.container}>
-                <TouchableOpacity onPress={regenerateJobs} style={styles.button}>
-                <Text style={styles.buttonText}>Regenerate Jobs</Text>
-            </TouchableOpacity>
-                
-                
-                
-                <FlatList
-                    data={jobs}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity key={item.key} onPress={() => pressHandler(item)} style={styles.item}>
-                            <Text style={styles.jobName}>{item.name}</Text>
-                            <Text style={styles.text}>{item.restaurant}</Text>
-                            <Text style={styles.text}>{item.pay}</Text>
-                            <Text style={styles.text}>{item.distance}</Text>
-                            <Text style={styles.text}>{item.datetime}</Text>
-                            
-                            <TouchableOpacity onPress={() => favoriteHandler(item.key)} style={styles.favoriteButton}>
-                                <Text style={styles.favoriteButtonText}>Favorite</Text>
-                            </TouchableOpacity>
-                        </TouchableOpacity>
-                    )}
-                />
+    const renderJobItem = ({ item }) => (
+        <TouchableOpacity onPress={() => pressHandler(item)} style={styles.item}>
+          <Text style={styles.jobName}>{item.name}</Text>
+          <Text style={styles.text}>{item.restaurant}</Text>
+          <Text style={styles.text}>{item.pay}</Text>
+          <Text style={styles.text}>{item.distance}</Text>
+          <Text style={styles.text}>{item.datetime}</Text>
+          {/* Favorite button */}
+          <TouchableOpacity onPress={() => favoriteHandler(item.key)} style={styles.favoriteButton}>
+            <Text style={styles.favoriteButtonText}>
+              {favorites.some((fav) => fav.key === item.key) ? 'Remove Favorite' : 'Favorite'}
+            </Text>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      );
+      
+      
 
-                {/* Modal for job details */}
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={selectedJob !== null}
-                    onRequestClose={closeModal}
-                >
-                    <View style={styles.modalView}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.jobName}>{selectedJob?.name}</Text>
-                        <Image
-                            source={require('../assets/rest_icon.png')}
-                            style={styles.image}
-                        />
-                        <Text style={styles.restaurant}>{selectedJob?.restaurant}</Text>
-                        <View style={styles.ratingContainer}>
-                            <Ionicons name="star" size={20} color="#f1c40f" style={styles.starIcon} />
-                            <Text style={styles.ratingText}>{selectedJob?.rating}</Text>
-                        </View>
-                        <Text>{selectedJob?.pay}</Text>
-                        <Text>{selectedJob?.distance}</Text>
-                        <Text>{selectedJob?.datetime}</Text>
-                        <Text>{selectedJob?.desc}</Text>
-                        <Text>testing text</Text>
-                        <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
-                            <Text style={styles.closeButtonText}>Close</Text>
-                        </TouchableOpacity>
-                        {/* Add buttons for applying and other actions */}
-                        <TouchableOpacity style={styles.applyButton}>
-                            <Text style={styles.applyButtonText}>Apply for Job</Text>
-                        </TouchableOpacity>
-                        {/* Add more buttons as needed */}
-                    </View>
-                    </View>
-                </Modal>
+
+    
+      return (
+        // <LinearGradient colors={['red', 'yellow', 'green', 'blue', 'purple']} style={styles.linearGradient}>
+        <View style={styles.container}>
+          {/* Button to regenerate jobs */}
+          <TouchableOpacity onPress={regenerateJobs} style={styles.button}>
+            <Text style={styles.buttonText}>Regenerate Jobs</Text>
+          </TouchableOpacity>
+          
+          {/* Tabs for switching between Jobs Near Me and Favorites */}
+          <View style={styles.tabsContainer}>
+            <TouchableOpacity onPress={() => setShowFavorites(false)} style={[styles.tab, !showFavorites && styles.activeTab]}>
+              <Text style={styles.tabText}>Jobs Near Me</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setShowFavorites(true)} style={[styles.tab, showFavorites && styles.activeTab]}>
+              <Text style={styles.tabText}>Favorites</Text>
+            </TouchableOpacity>
+          </View>
+          
+          {/* FlatList to display jobs */}
+          <FlatList
+            data={showFavorites ? favorites : jobs}
+            renderItem={renderJobItem}
+            keyExtractor={(item) => item.key}
+            style={styles.flatList} // Add this line with your desired style name
+
+          />
+      
+          {/* Modal for job details */}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={selectedJob !== null}
+            onRequestClose={closeModal}
+          >
+            <View style={styles.modalView}>
+              <View style={styles.modalContent}>
+                <Text style={styles.jobName}>{selectedJob?.name}</Text>
+                <Image
+                  source={require('../assets/rest_icon.png')}
+                  style={styles.image}
+                />
+                <Text style={styles.restaurant}>{selectedJob?.restaurant}</Text>
+                <View style={styles.ratingContainer}>
+                  <Ionicons name="star" size={20} color="#f1c40f" style={styles.starIcon} />
+                  <Text style={styles.ratingText}>{selectedJob?.rating}</Text>
+                </View>
+                <Text>{selectedJob?.pay}</Text>
+                <Text>{selectedJob?.distance}</Text>
+                <Text>{selectedJob?.datetime}</Text>
+                <Text>{selectedJob?.desc}</Text>
+                <Text>testing text</Text>
+                <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
+                  <Text style={styles.closeButtonText}>Close</Text>
+                </TouchableOpacity>
+                {/* Add buttons for applying and other actions */}
+                <TouchableOpacity style={styles.applyButton}>
+                  <Text style={styles.applyButtonText}>Apply for Job</Text>
+                </TouchableOpacity>
+                {/* Add more buttons as needed */}
+              </View>
             </View>
+          </Modal>
+        </View>
         // </LinearGradient>
-    );
+      );
+      
 }
 
 const styles = StyleSheet.create({
@@ -123,9 +163,33 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 10,
-        paddingHorizontal: 20,
-        marginHorizontal: 20,
         backgroundColor: '#fef4f0',
+    },
+    flatList: {
+        marginHorizontal: 20,
+        paddingHorizontal: 20,
+    },
+    tabsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 10,
+        
+    },
+    tab: {
+        flex: 1,
+        paddingVertical: 10,
+        alignItems: 'center',
+        borderBottomWidth: 2,
+        borderBottomColor: 'gray',
+    },
+    activeTab: {
+        borderBottomColor: 'orange',
+
+    },
+    tabText: {
+        fontWeight: 'bold',
+        fontSize: 16,
+        color: '#333',
     },
     image: {
         width: 200, // Set the desired width

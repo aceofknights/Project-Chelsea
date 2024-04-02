@@ -9,11 +9,12 @@ export default function HomePage() {
     const [selectedJob, setSelectedJob] = useState(null);
     const [favorites, setFavorites] = useState([]);
     const [showFavorites, setShowFavorites] = useState(false);
+    const [appliedJobs, setAppliedJobs] = useState([]);
+    const [activeTab, setActiveTab] = useState('NearMe');
+
 
     const pressHandler = (job) => {
         setSelectedJob(job);
-        console.log("oh baby click me harder, job: "+job);  
-
     };
 
 
@@ -34,7 +35,14 @@ export default function HomePage() {
     // Function to show toast message
     const showToast = (message) => {
         ToastAndroid.show(message, ToastAndroid.SHORT);
-    };    
+    };   
+    
+    const applyHandler = () => {
+      if (selectedJob) {
+          setAppliedJobs([...appliedJobs, selectedJob]);
+          showToast('Applied for Job'); // Show a toast message
+      }
+  };
 
     const closeModal = () => {
         setSelectedJob(null);
@@ -65,21 +73,54 @@ export default function HomePage() {
         setJobs(generateJobs());
     };
 
-    const renderJobItem = ({ item }) => (
+    const unapplyHandler = (key) => {
+      setAppliedJobs(appliedJobs.filter((item) => item.key !== key));
+      showToast('Removed from Applied Jobs'); // Show a toast message
+    };
+    
+    const renderJobItem = ({ item }) => {
+      const isFavorite = favorites.some((fav) => fav.key === item.key);
+      const isApplied = appliedJobs.some((job) => job.key === item.key);
+    
+      if (activeTab === 'Favorites' && !isFavorite) {
+        return null; // Don't render non-favorite jobs in Favorites tab
+      }
+      if (activeTab === 'Applied' && !isApplied) {
+        return null; // Don't render non-applied jobs in Applied Jobs tab
+      }
+    
+      return (
         <TouchableOpacity onPress={() => pressHandler(item)} style={styles.item}>
           <Text style={styles.jobName}>{item.name}</Text>
           <Text style={styles.text}>{item.restaurant}</Text>
           <Text style={styles.text}>{item.pay}</Text>
           <Text style={styles.text}>{item.distance}</Text>
           <Text style={styles.text}>{item.datetime}</Text>
-          {/* Favorite button */}
-          <TouchableOpacity onPress={() => favoriteHandler(item.key)} style={styles.favoriteButton}>
-            <Text style={styles.favoriteButtonText}>
-              {favorites.some((fav) => fav.key === item.key) ? 'Remove Favorite' : 'Favorite'}
-            </Text>
-          </TouchableOpacity>
+          {/* Conditionally render favorite button based on the view */}
+          {(activeTab === 'NearMe' || activeTab === 'Favorites') && (
+            <TouchableOpacity onPress={() => favoriteHandler(item.key)} style={styles.favoriteButton}>
+              <Text style={styles.favoriteButtonText}>
+                {isFavorite ? 'Remove Favorite' : 'Favorite'}
+              </Text>
+            </TouchableOpacity>
+          )}
+          {/* Render Unapply button in Applied Jobs tab */}
+          {(activeTab === 'Applied' && isApplied && (
+            <TouchableOpacity onPress={() => unapplyHandler(item.key)} style={styles.applyButton}>
+              <Text style={styles.applyButtonText}>Unapply</Text>
+            </TouchableOpacity>
+          ))}
+          {/* Render Apply button in Applied Jobs tab for unapplied jobs */}
+          {(activeTab === 'Applied' && !isApplied && (
+            <TouchableOpacity onPress={() => applyHandler(item.key)} style={styles.applyButton}>
+              <Text style={styles.applyButtonText}>Apply</Text>
+            </TouchableOpacity>
+          ))}
         </TouchableOpacity>
       );
+    };
+    
+    
       
       
 
@@ -93,15 +134,18 @@ export default function HomePage() {
             <Text style={styles.buttonText}>Regenerate Jobs</Text>
           </TouchableOpacity>
           
-          {/* Tabs for switching between Jobs Near Me and Favorites */}
-          <View style={styles.tabsContainer}>
-            <TouchableOpacity onPress={() => setShowFavorites(false)} style={[styles.tab, !showFavorites && styles.activeTab]}>
-              <Text style={styles.tabText}>Jobs Near Me</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setShowFavorites(true)} style={[styles.tab, showFavorites && styles.activeTab]}>
-              <Text style={styles.tabText}>Favorites</Text>
-            </TouchableOpacity>
-          </View>
+            {/* Tabs for switching between Jobs Near Me, Favorites, and Applied Jobs */}
+            <View style={styles.tabsContainer}>
+                <TouchableOpacity onPress={() => setActiveTab('NearMe')} style={[styles.tab, activeTab === 'NearMe' && styles.activeTab]}>
+                    <Text style={styles.tabText}>Jobs Near Me</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setActiveTab('Favorites')} style={[styles.tab, activeTab === 'Favorites' && styles.activeTab]}>
+                    <Text style={styles.tabText}>Favorites</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => setActiveTab('Applied')} style={[styles.tab, activeTab === 'Applied' && styles.activeTab]}>
+                    <Text style={styles.tabText}>Applied Jobs</Text>
+                </TouchableOpacity>
+            </View>
           
           {/* FlatList to display jobs */}
           <FlatList
@@ -131,17 +175,22 @@ export default function HomePage() {
                   <Ionicons name="star" size={20} color="#f1c40f" style={styles.starIcon} />
                   <Text style={styles.ratingText}>{selectedJob?.rating}</Text>
                 </View>
-                <Text>{selectedJob?.pay}</Text>
-                <Text>{selectedJob?.distance}</Text>
-                <Text>{selectedJob?.datetime}</Text>
-                <Text>{selectedJob?.desc}</Text>
-                <Text>testing text</Text>
+                <View style={styles.shadowContainer}>
+
+                <View style={styles.modalTextContainer}>
+                  <Text style={styles.modalText}>{selectedJob?.pay}</Text>
+                  <Text style={styles.modalText}>{selectedJob?.distance}</Text>
+                  <Text style={styles.modalText}>{selectedJob?.datetime}</Text>
+                  <Text style={styles.modalText}>{selectedJob?.desc}</Text>
+
+                </View>
+                </View>
                 <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
                   <Text style={styles.closeButtonText}>Close</Text>
                 </TouchableOpacity>
                 {/* Add buttons for applying and other actions */}
-                <TouchableOpacity style={styles.applyButton}>
-                  <Text style={styles.applyButtonText}>Apply for Job</Text>
+                <TouchableOpacity onPress={applyHandler} style={styles.applyButton}>
+                  <Text style={styles.applyButtonText}>Apply</Text>
                 </TouchableOpacity>
                 {/* Add more buttons as needed */}
               </View>
@@ -192,8 +241,8 @@ const styles = StyleSheet.create({
         color: '#333',
     },
     image: {
-        width: 200, // Set the desired width
-        height: 200, // Set the desired height
+        width: 200,
+        height: 200, 
     },
     item: {
         marginTop: 24,
@@ -203,6 +252,9 @@ const styles = StyleSheet.create({
         backgroundColor: "#ef8833",
         position: 'relative', // Added to position the favorite button
         borderRadius: 20,
+        borderColor: '#331507',
+        borderWidth: 3, 
+
     },
     jobName: {
         fontWeight: 'bold',
@@ -236,6 +288,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.1)', // Semi-transparent background
         padding: 5,
         borderRadius: 5,
+        borderWidth: 1, 
+        borderColor: '#331507',
+
     },
     favoriteButtonText: {
         color: '#331507',
@@ -245,34 +300,45 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black background
-        padding: 20, // Add padding to the modal content
+        padding: 20, 
     },
-
+    
+    modalTextContainer: {
+      alignItems: 'center',
+      borderWidth: 3, 
+      borderColor: '#331507', 
+      padding: 5, 
+      backgroundColor: '#cbc3c0', // Slightly darker background color
+      elevation: 15,
+    },
     modalContent: {
-        backgroundColor: '#fff', // White background for the modal content
-        borderRadius: 10, // Rounded corners
-        padding: 20, // Padding inside the modal content
+        backgroundColor: '#fef4f0', 
+        borderRadius: 10, 
+        padding: 20, 
         alignItems: 'center',
-        elevation: 5, // Add elevation for Android shadow
+        elevation: 10, 
+        
     },
     closeButton: {
-        backgroundColor: 'orange',
+        backgroundColor: '#ef8833',
         padding: 10,
         borderRadius: 5,
         marginTop: 20,
+        elevation: 5,
     },
     closeButtonText: {
-        color: '#fff',
+        color: '#331507',
         fontWeight: 'bold',
     },
     applyButton: {
-        backgroundColor: 'orange',
+        backgroundColor: '#ef8833',
         padding: 10,
         borderRadius: 5,
         marginTop: 20,
+        elevation: 5,
     },
     applyButtonText: {
-        color: '#fff',
+        color: '#331507',
         fontWeight: 'bold',
     },
 });

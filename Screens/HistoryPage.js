@@ -21,7 +21,7 @@ const HistoryPage = () => {
     { id: 13, date: moment.tz('2024-03-01', 'UTC'), hoursWorked: 8, moneyEarned: 30 },
     { id: 14, date: moment.tz('2024-03-02', 'UTC'), hoursWorked: 6, moneyEarned: 20 },
     { id: 15, date: moment.tz('2024-03-03', 'UTC'), hoursWorked: 9, moneyEarned: 10 },
-    { id: 16, date: moment.tz('2024-03-04', 'UTC'), hoursWorked: 9, moneyEarned: 5 },
+    { id: 16, date: moment.tz('2024-04-01', 'UTC'), hoursWorked: 9, moneyEarned: 5 },
 
   ]);
 

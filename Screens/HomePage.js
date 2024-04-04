@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, Image, Text, View, TouchableOpacity, FlatList, Modal, ToastAndroid  } from 'react-native';
+import { StyleSheet, Platform, Image, Text, View, TouchableOpacity, FlatList, Modal  } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from Expo vector icons
-
-import { LinearGradient } from "expo-linear-gradient";
+import NotificationBanner from '../scripts/NotificationBanner.js'; // Import the NotificationBanner component
+import FlashMessage, { showMessage, hideMessage } from 'react-native-flash-message';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function HomePage() {
     const [jobs, setJobs] = useState(generateJobs());
@@ -18,31 +19,41 @@ export default function HomePage() {
     };
 
 
-    const favoriteHandler = (key) => {
-        const job = jobs.find((item) => item.key === key);
-        if (job) {
-            const isFavorite = favorites.some((item) => item.key === key);
-            if (isFavorite) {
-                setFavorites(favorites.filter((item) => item.key !== key));
-            } else {
-                setFavorites([...favorites, job]);
-                showToast('Added to Favorites'); // Show a toast message
 
-            }
+
+    const favoriteHandler = (key) => {
+      const job = jobs.find((item) => item.key === key);
+      if (job) {
+        const isFavorite = favorites.some((item) => item.key === key);
+        if (isFavorite) {
+          setFavorites(favorites.filter((item) => item.key !== key));
+          showMessage({
+            message: 'removed',
+            type: 'error', // You can customize the type (info, success, warning, error)
+          });
+        } else {
+          setFavorites([...favorites, job]);
+          showMessage({
+            message: 'Saved',
+            type: 'warning', // You can customize the type (info, success, warning, error)
+          });
         }
+      }
+
     };
  
-    // Function to show toast message
-    const showToast = (message) => {
-        ToastAndroid.show(message, ToastAndroid.SHORT);
-    };   
     
     const applyHandler = () => {
       if (selectedJob) {
-          setAppliedJobs([...appliedJobs, selectedJob]);
-          showToast('Applied for Job'); // Show a toast message
+        setAppliedJobs([...appliedJobs, selectedJob]);
+        showMessage({
+          message: 'Successfully applied for the job!',
+          type: 'success',
+        });
       }
-  };
+      setSelectedJob(null);
+
+    };
 
     const closeModal = () => {
         setSelectedJob(null);
@@ -75,12 +86,18 @@ export default function HomePage() {
 
     const unapplyHandler = (key) => {
       setAppliedJobs(appliedJobs.filter((item) => item.key !== key));
-      showToast('Removed from Applied Jobs'); // Show a toast message
+      showMessage({
+        message: 'Job unapplied successfully!',
+        type: 'info', // You can customize the type (info, success, warning, error)
+      });
     };
     
     const renderJobItem = ({ item }) => {
       const isFavorite = favorites.some((fav) => fav.key === item.key);
       const isApplied = appliedJobs.some((job) => job.key === item.key);
+    
+        
+      
     
       if (activeTab === 'Favorites' && !isFavorite) {
         return null; // Don't render non-favorite jobs in Favorites tab
@@ -91,6 +108,7 @@ export default function HomePage() {
     
       return (
         <TouchableOpacity onPress={() => pressHandler(item)} style={styles.item}>
+          {/* Job details */}
           <Text style={styles.jobName}>{item.name}</Text>
           <Text style={styles.text}>{item.restaurant}</Text>
           <Text style={styles.text}>{item.pay}</Text>
@@ -99,9 +117,11 @@ export default function HomePage() {
           {/* Conditionally render favorite button based on the view */}
           {(activeTab === 'NearMe' || activeTab === 'Favorites') && (
             <TouchableOpacity onPress={() => favoriteHandler(item.key)} style={styles.favoriteButton}>
-              <Text style={styles.favoriteButtonText}>
-                {isFavorite ? 'Remove Favorite' : 'Favorite'}
-              </Text>
+              {isFavorite ? (
+                <FontAwesome name="bookmark" size={styles.bookmarked.size} color={styles.bookmarked.color} />
+              ) : (
+                <FontAwesome name="bookmark-o" size={styles.unbookmarked.size} color={styles.unbookmarked.color} />
+              )}
             </TouchableOpacity>
           )}
           {/* Render Unapply button in Applied Jobs tab */}
@@ -121,6 +141,8 @@ export default function HomePage() {
     };
     
     
+    
+    
       
       
 
@@ -129,11 +151,13 @@ export default function HomePage() {
       return (
         // <LinearGradient colors={['red', 'yellow', 'green', 'blue', 'purple']} style={styles.linearGradient}>
         <View style={styles.container}>
+          <FlashMessage position="top" />
+
           {/* Button to regenerate jobs */}
           <TouchableOpacity onPress={regenerateJobs} style={styles.button}>
             <Text style={styles.buttonText}>Regenerate Jobs</Text>
           </TouchableOpacity>
-          
+
             {/* Tabs for switching between Jobs Near Me, Favorites, and Applied Jobs */}
             <View style={styles.tabsContainer}>
                 <TouchableOpacity onPress={() => setActiveTab('NearMe')} style={[styles.tab, activeTab === 'NearMe' && styles.activeTab]}>
@@ -185,14 +209,14 @@ export default function HomePage() {
 
                 </View>
                 </View>
-                <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
-                  <Text style={styles.closeButtonText}>Close</Text>
-                </TouchableOpacity>
-                {/* Add buttons for applying and other actions */}
-                <TouchableOpacity onPress={applyHandler} style={styles.applyButton}>
-                  <Text style={styles.applyButtonText}>Apply</Text>
-                </TouchableOpacity>
-                {/* Add more buttons as needed */}
+                <View style={styles.buttonsContainer}>
+        <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
+          <Text style={styles.closeButtonText}>Close</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={applyHandler} style={styles.applyButton}>
+          <Text style={styles.applyButtonText}>Apply</Text>
+        </TouchableOpacity>
+      </View>
               </View>
             </View>
           </Modal>
@@ -215,13 +239,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#fef4f0',
     },
     flatList: {
-        marginHorizontal: 20,
-        paddingHorizontal: 20,
+        marginHorizontal: 5,
     },
     tabsContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 10,
+        marginBottom: 5,
         
     },
     tab: {
@@ -245,8 +268,8 @@ const styles = StyleSheet.create({
         height: 200, 
     },
     item: {
-        marginTop: 24,
-        padding: 30,
+        marginTop: 10,
+        padding: 10,
         fontSize: 24,
         textAlign: 'center',
         backgroundColor: "#ef8833",
@@ -281,19 +304,25 @@ const styles = StyleSheet.create({
     ratingText: {
         fontSize: 16,
     },
-    favoriteButton: {
-        position: 'absolute',
-        top: 5,
-        right: 5,
-        backgroundColor: 'rgba(0, 0, 0, 0.1)', // Semi-transparent background
-        padding: 5,
-        borderRadius: 5,
-        borderWidth: 1, 
-        borderColor: '#331507',
-
+    bookmarked: {
+      color: '#0e4fdb', // Blue color for bookmarked icon
+      size: 30, // Icon size
     },
+    unbookmarked: {
+      color: '#331507', // brown color for unbookmarked icon
+      size: 30, // Icon size
+    },
+    favoriteButton: {
+      position: 'absolute',
+      right: 5,
+      borderRadius: 3,
+      paddingVertical: 5,
+      paddingHorizontal: 10,
+      marginLeft: 200, // Adjust as needed for spacing
+    },
+
     favoriteButtonText: {
-        color: '#331507',
+      fontSize: 30,
     },
     modalView: {
         flex: 1,
@@ -313,17 +342,24 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         backgroundColor: '#fef4f0', 
-        borderRadius: 10, 
+        borderRadius: 40, 
         padding: 20, 
         alignItems: 'center',
         elevation: 10, 
         
     },
+    buttonsContainer: {
+      flexDirection: 'row', // Align items horizontally
+      justifyContent: 'space-between', // Space buttons evenly
+      paddingHorizontal: 20, // Add horizontal padding to the container
+
+    },
     closeButton: {
         backgroundColor: '#ef8833',
         padding: 10,
         borderRadius: 5,
-        marginTop: 20,
+        marginTop: 10,
+        marginRight: 10,
         elevation: 5,
     },
     closeButtonText: {
@@ -334,7 +370,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#ef8833',
         padding: 10,
         borderRadius: 5,
-        marginTop: 20,
+        marginTop: 10,
         elevation: 5,
     },
     applyButtonText: {

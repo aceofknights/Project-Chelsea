@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome'; // Import the star and gear icons
 
 const UserProfile = () => {
   const [name] = useState('Chelsea');
+  const [rating] = useState(4.9); // New state for rating
   const [location, setLocation] = useState('Knoxville');
   const [jobTitle, setJobTitle] = useState('Bartender');
   const [hours, setHours] = useState('9-5 shift');
   const [certifications, setCertifications] = useState(['Bartending License']);
+  const [previousExperiences, setPreviousExperiences] = useState(['Previous Experience 1', 'Previous Experience 2']); // New state for previous experiences
   const [profilePic, setProfilePic] = useState(require('../assets/dog picture.png')); // Sample profile picture
   const [editing, setEditing] = useState(false); // New state for editing mode
 
@@ -24,7 +27,13 @@ const UserProfile = () => {
       <View style={styles.header}>
         <View style={styles.profileContainer}>
           <Image source={profilePic} style={styles.profilePic} />
-          <Text style={styles.name}>{name}</Text>
+          <View style= {styles.nameStarContainer}>
+            <Text style={styles.name}>{name}</Text>
+            <View style={styles.ratingContainer}>
+              <Icon name="star" size={20} color="blue" style={styles.starIcon} />
+              <Text style={styles.ratingText}>{rating}</Text>
+            </View>
+          </View>
         </View>
         {editing ? (
           <TouchableOpacity style={styles.saveButton} onPress={handleSaveButton}>
@@ -32,7 +41,7 @@ const UserProfile = () => {
           </TouchableOpacity>
         ) : (
           <TouchableOpacity style={styles.editButton} onPress={handleEditButton}>
-            <Text style={styles.editButtonText}>Edit</Text>
+            <Icon name="gear" size={20} color="blue" />
           </TouchableOpacity>
         )}
       </View>
@@ -100,17 +109,44 @@ const UserProfile = () => {
           </TouchableOpacity>
         )}
       </View>
+      {/* Previous Experiences */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Previous Experiences</Text>
+        {previousExperiences.map((experience, index) => (
+          <TextInput
+            key={index}
+            style={styles.editInput}
+            value={experience}
+            onChangeText={(text) => {
+              const updatedExperiences = [...previousExperiences];
+              updatedExperiences[index] = text;
+              setPreviousExperiences(updatedExperiences);
+            }}
+          />
+        ))}
+        {/* Add previous experience input */}
+        {editing && (
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => setPreviousExperiences([...previousExperiences, ''])}
+          >
+            <Text style={styles.addButtonText}>Add Experience</Text>
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 };
 
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: '#fef4fo',
   },
   header: {
+    padding: 20,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -128,63 +164,68 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: '#331507',
   },
+  nameStarContainer: {
+    flexDirection: 'column',
+  },
   name: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#331507',
   },
-  editButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    backgroundColor: '#ef8833',
-    borderRadius: 5,
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
-  editButtonText: {
+  ratingText: {
     color: '#331507',
-    fontSize: 16,
+    marginLeft: 5,
+    fontSize: 18,
+  },
+  starIcon: {
+    elevation: 5,
+  },
+  editButton: {
+    padding: 10,
   },
   saveButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    backgroundColor: '#27ae60',
-    borderRadius: 5,
-  },
-  saveButtonText: {
-    color: '#331507',
-    fontSize: 16,
+    padding: 10,
   },
   section: {
-    backgroundColor: '#ef8833',
-    padding: 10,
-    borderRadius: 5,
+    paddingHorizontal:20,
+    paddingVertical: 10,
     marginBottom: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: '#ccc',
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 5,
     color: '#331507',
-
   },
   infoText: {
     fontSize: 16,
     marginBottom: 5,
     color: '#331507',
-
   },
-  certificationText: {
-    fontSize: 16,
-    marginBottom: 5,
-    color: '#331507',
-
-  },
-  certificationInput: {
+  editInput: {
     borderWidth: 1,
     borderColor: '#ccc',
     borderRadius: 5,
     paddingVertical: 8,
     paddingHorizontal: 12,
     marginBottom: 10,
+  },
+  addButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: '#ef8833',
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  addButtonText: {
+    color: '#331507',
+    fontSize: 16,
   },
 });
 

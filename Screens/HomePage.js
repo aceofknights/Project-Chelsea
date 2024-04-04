@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Platform, Image, Text, View, TouchableOpacity, FlatList, Modal  } from 'react-native';
+import { StyleSheet, TextInput, Image, Text, View, TouchableOpacity, FlatList, Modal  } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from Expo vector icons
 import NotificationBanner from '../scripts/NotificationBanner.js'; // Import the NotificationBanner component
 import FlashMessage, { showMessage, hideMessage } from 'react-native-flash-message';
@@ -59,25 +59,46 @@ export default function HomePage() {
         setSelectedJob(null);
     };
 
-    // Function to generate job data
+
+
+
     function generateJobs() {
-        const generatedJobs = [];
-        for (let i = 1; i <= 10; i++) {
-            const rating = (Math.random() * 4 + 1).toFixed(1); // Generate a random rating between 1.0 and 5.0 with one decimal point
-
-            generatedJobs.push({
-                name: `Job${i}`,
-                key: `${i}`,
-                restaurant: `Restaurant ${String.fromCharCode(64 + i)}`,
-                pay: `Pay: $${10 + i}/hr`,
-                distance: `Distance from you: ${i * i} miles`,
-                datetime: `When: March ${i}, 2024, ${8 + i}:00 AM`,
-                desc: 'Description of shift: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                rating: rating, // Add the random rating to each job
-
-            });
-        }
-        return generatedJobs;
+      const generatedJobs = [];
+      for (let i = 1; i <= 10; i++) {
+        const rating = (Math.random() * 4 + 1).toFixed(1); // Generate a random rating between 1.0 and 5.0 with one decimal point
+    
+        const job = {
+          name: `Job Role${i}`,
+          key: `${i}`,
+          restaurant: `Restaurant ${String.fromCharCode(64 + i)}`,
+          pay: `$${10 + i}/hr`, // Just the pay amount without "Pay:"
+          distance: `${i * i} miles`,
+          datetime: `May ${i}, 2024, ${1 + i}:00 AM - ${11 + i}:00 pm`,
+          desc:
+            'Description of shift: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+          rating: rating, // Add the random rating to each job
+        };
+    
+        // Modify the distance and datetime properties to include bold text
+        job.pay = (
+          <Text>
+            <Text style={{ fontWeight: 'bold' }}>Pay:</Text> {job.pay}
+          </Text>
+        );
+        job.distance = (
+          <Text>
+            <Text style={{ fontWeight: 'bold' }}>Distance from you:</Text> {job.distance}
+          </Text>
+        );
+        job.datetime = (
+          <Text>
+            <Text style={{ fontWeight: 'bold' }}>When:</Text> {job.datetime}
+          </Text>
+        );
+    
+        generatedJobs.push(job);
+      }
+      return generatedJobs;
     }
 
     const regenerateJobs = () => {
@@ -96,9 +117,6 @@ export default function HomePage() {
       const isFavorite = favorites.some((fav) => fav.key === item.key);
       const isApplied = appliedJobs.some((job) => job.key === item.key);
     
-        
-      
-    
       if (activeTab === 'Favorites' && !isFavorite) {
         return null; // Don't render non-favorite jobs in Favorites tab
       }
@@ -108,12 +126,21 @@ export default function HomePage() {
     
       return (
         <TouchableOpacity onPress={() => pressHandler(item)} style={styles.item}>
+          <Image
+            source={require('../assets/work.jpg')}
+            style={styles.mainImage}
+            resizeMode="cover" // Stretch the image to cover the entire container
+          />
           {/* Job details */}
-          <Text style={styles.jobName}>{item.name}</Text>
-          <Text style={styles.text}>{item.restaurant}</Text>
-          <Text style={styles.text}>{item.pay}</Text>
-          <Text style={styles.text}>{item.distance}</Text>
-          <Text style={styles.text}>{item.datetime}</Text>
+          <View style={styles.jobDetailsContainer}>
+            <View style={styles.jobInfoContainer}>
+              <Text style={styles.jobName}>{item.name}</Text>
+              <Text style={styles.restaurantName}>{item.restaurant}</Text>
+            </View>
+            <Text style={styles.text}>{item.pay}</Text>
+            <Text style={styles.text}>{item.distance}</Text>
+            <Text style={styles.text}>{item.datetime}</Text>
+          </View>
           {/* Conditionally render favorite button based on the view */}
           {(activeTab === 'NearMe' || activeTab === 'Favorites') && (
             <TouchableOpacity onPress={() => favoriteHandler(item.key)} style={styles.favoriteButton}>
@@ -125,17 +152,17 @@ export default function HomePage() {
             </TouchableOpacity>
           )}
           {/* Render Unapply button in Applied Jobs tab */}
-          {(activeTab === 'Applied' && isApplied && (
+          {(activeTab === 'Applied' && isApplied) && (
             <TouchableOpacity onPress={() => unapplyHandler(item.key)} style={styles.applyButton}>
               <Text style={styles.applyButtonText}>Unapply</Text>
             </TouchableOpacity>
-          ))}
+          )}
           {/* Render Apply button in Applied Jobs tab for unapplied jobs */}
-          {(activeTab === 'Applied' && !isApplied && (
+          {(activeTab === 'Applied' && !isApplied) && (
             <TouchableOpacity onPress={() => applyHandler(item.key)} style={styles.applyButton}>
               <Text style={styles.applyButtonText}>Apply</Text>
             </TouchableOpacity>
-          ))}
+          )}
         </TouchableOpacity>
       );
     };
@@ -148,81 +175,94 @@ export default function HomePage() {
 
 
     
-      return (
-        // <LinearGradient colors={['red', 'yellow', 'green', 'blue', 'purple']} style={styles.linearGradient}>
-        <View style={styles.container}>
-          <FlashMessage position="top" />
+    return (
+      <View style={styles.container}>
+        <FlashMessage position="top" />
+    
+        <View style={styles.searchContainer}>
+      <View style={styles.searchBar}>
+        <FontAwesome name="search" size={20} style={styles.searchIcon} />
+        <TextInput
+          placeholder="Search..."
+          style={styles.searchInput}
+          // Add onChangeText and value props as needed
+        />
+                <View style={styles.divider} />
 
-          {/* Button to regenerate jobs */}
-          <TouchableOpacity onPress={regenerateJobs} style={styles.button}>
-            <Text style={styles.buttonText}>Regenerate Jobs</Text>
+        <FontAwesome name="map-marker" size={20} style={styles.locationIcon} />
+        <TextInput
+          placeholder="Enter your location"
+          style={styles.locationInput}
+          // Add onChangeText and value props as needed
+        />
+      </View>
+    </View>
+    
+        {/* Tabs for switching between Jobs Near Me, Favorites, and Applied Jobs */}
+        <View style={styles.tabsContainer}>
+          <TouchableOpacity onPress={() => setActiveTab('NearMe')} style={[styles.tab, activeTab === 'NearMe' && styles.activeTab]}>
+            <Text style={styles.tabText}>Jobs Near Me</Text>
           </TouchableOpacity>
-
-            {/* Tabs for switching between Jobs Near Me, Favorites, and Applied Jobs */}
-            <View style={styles.tabsContainer}>
-                <TouchableOpacity onPress={() => setActiveTab('NearMe')} style={[styles.tab, activeTab === 'NearMe' && styles.activeTab]}>
-                    <Text style={styles.tabText}>Jobs Near Me</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setActiveTab('Favorites')} style={[styles.tab, activeTab === 'Favorites' && styles.activeTab]}>
-                    <Text style={styles.tabText}>Favorites</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => setActiveTab('Applied')} style={[styles.tab, activeTab === 'Applied' && styles.activeTab]}>
-                    <Text style={styles.tabText}>Applied Jobs</Text>
-                </TouchableOpacity>
-            </View>
-          
-          {/* FlatList to display jobs */}
-          <FlatList
-            data={showFavorites ? favorites : jobs}
-            renderItem={renderJobItem}
-            keyExtractor={(item) => item.key}
-            style={styles.flatList} // Add this line with your desired style name
-
-          />
-      
-          {/* Modal for job details */}
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={selectedJob !== null}
-            onRequestClose={closeModal}
-          >
-            <View style={styles.modalView}>
-              <View style={styles.modalContent}>
-                <Text style={styles.jobName}>{selectedJob?.name}</Text>
-                <Image
-                  source={require('../assets/rest_icon.png')}
-                  style={styles.image}
-                />
-                <Text style={styles.restaurant}>{selectedJob?.restaurant}</Text>
-                <View style={styles.ratingContainer}>
-                  <Ionicons name="star" size={20} color="#f1c40f" style={styles.starIcon} />
-                  <Text style={styles.ratingText}>{selectedJob?.rating}</Text>
-                </View>
-                <View style={styles.shadowContainer}>
-
+          <TouchableOpacity onPress={() => setActiveTab('Favorites')} style={[styles.tab, activeTab === 'Favorites' && styles.activeTab]}>
+            <Text style={styles.tabText}>Saved</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setActiveTab('Applied')} style={[styles.tab, activeTab === 'Applied' && styles.activeTab]}>
+            <Text style={styles.tabText}>Applied</Text>
+          </TouchableOpacity>
+        </View>
+        {/* Button to regenerate jobs */}
+        {/* <TouchableOpacity onPress={regenerateJobs} style={styles.button}>
+          <Text style={styles.buttonText}>Reg</Text>
+        </TouchableOpacity> */}
+        {/* FlatList to display jobs */}
+        <FlatList
+          data={showFavorites ? favorites : jobs}
+          renderItem={renderJobItem}
+          keyExtractor={(item) => item.key}
+          style={styles.flatList} // Add this line with your desired style name
+        />
+    
+        {/* Modal for job details */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={selectedJob !== null}
+          onRequestClose={closeModal}
+        >
+          <View style={styles.modalView}>
+            <View style={styles.modalContent}>
+              <Text style={styles.jobName}>{selectedJob?.name}</Text>
+              <Image
+                source={require('../assets/rest_icon.png')}
+                style={styles.image}
+              />
+              <Text style={styles.restaurant}>{selectedJob?.restaurant}</Text>
+              <View style={styles.ratingContainer}>
+                <Ionicons name="star" size={20} color="#f1c40f" style={styles.starIcon} />
+                <Text style={styles.ratingText}>{selectedJob?.rating}</Text>
+              </View>
+              <View style={styles.shadowContainer}>
                 <View style={styles.modalTextContainer}>
                   <Text style={styles.modalText}>{selectedJob?.pay}</Text>
                   <Text style={styles.modalText}>{selectedJob?.distance}</Text>
                   <Text style={styles.modalText}>{selectedJob?.datetime}</Text>
                   <Text style={styles.modalText}>{selectedJob?.desc}</Text>
-
                 </View>
-                </View>
-                <View style={styles.buttonsContainer}>
-        <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
-          <Text style={styles.closeButtonText}>Close</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={applyHandler} style={styles.applyButton}>
-          <Text style={styles.applyButtonText}>Apply</Text>
-        </TouchableOpacity>
-      </View>
+              </View>
+              <View style={styles.buttonsContainer}>
+                <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
+                  <Text style={styles.closeButtonText}>Close</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={applyHandler} style={styles.applyButton}>
+                  <Text style={styles.applyButtonText}>Apply</Text>
+                </TouchableOpacity>
               </View>
             </View>
-          </Modal>
-        </View>
-        // </LinearGradient>
-      );
+          </View>
+        </Modal>
+      </View>
+    );
+    
       
 }
 
@@ -238,8 +278,47 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         backgroundColor: '#fef4f0',
     },
+    searchContainer: {
+      paddingHorizontal: 16,
+    },
+    searchBar: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: '#EAEAEA',
+      borderRadius: 20,
+      paddingHorizontal: 10,
+    },
+    searchIcon: {
+      marginRight: 10,
+    },
+    searchInput: {
+      flex: 1,
+      fontSize: 16,
+      paddingVertical: 10, // Adjust as needed for input padding
+    },
+    locationIcon: {
+      marginLeft: 'auto',
+      color: 'brown',
+      marginRight: 10,
+    },
+    locationInput: {
+      flex: 1,
+      fontSize: 16,
+      paddingVertical: 10, // Adjust as needed for input padding
+    },
+    divider: {
+      position: 'absolute',
+      top: 0,
+      bottom: 0,
+      width: 1,
+      backgroundColor: 'brown',
+      left: '50%', // Move the divider to the middle horizontally
+      transform: [{ translateX: -0.5 }], // Move it back to the left by half of its own width
+      zIndex: 2,
+    },
+  
     flatList: {
-        marginHorizontal: 5,
+        marginHorizontal: 12,
     },
     tabsContainer: {
         flexDirection: 'row',
@@ -268,22 +347,26 @@ const styles = StyleSheet.create({
         height: 200, 
     },
     item: {
-        marginTop: 10,
         padding: 10,
         fontSize: 24,
-        textAlign: 'center',
-        backgroundColor: "#ef8833",
-        position: 'relative', // Added to position the favorite button
-        borderRadius: 20,
-        borderColor: '#331507',
-        borderWidth: 3, 
-
+    },
+    mainImage: {
+      borderRadius: 20,
+      height: 160,
+      width: 350,
+    },
+    jobInfoContainer: {
+      flexDirection: 'row', // Arrange job name and restaurant name horizontally
+      alignItems: 'center', // Align items vertically
     },
     jobName: {
         fontWeight: 'bold',
-        marginBottom: 10,
         fontSize: 18,
         color: '#331506',
+    },
+    restaurantName: {
+      marginLeft: 15, // Add some spacing between job name and restaurant name
+      position: 'relative',
     },
     text: {
         color: '#331507',
@@ -314,7 +397,8 @@ const styles = StyleSheet.create({
     },
     favoriteButton: {
       position: 'absolute',
-      right: 5,
+      right: 20,
+      bottom: 55,
       borderRadius: 3,
       paddingVertical: 5,
       paddingHorizontal: 10,

@@ -47,11 +47,13 @@ export default function LoginPage({ navigation}) {
   //wrapping items in view tags and giving them a style make them easy to add style to
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Project Chelsea</Text>
+      <Text style={styles.slogan}>Shift the way you work</Text>
+
       <Image
         source={require('../assets/dog picture.png')}
         style={styles.image}
       />
-      <Text style={styles.title}>Login to Project Chelsea</Text>
       <View style={styles.inputContainer}>
         <View style={styles.inputWrapper}>
           <TextInput
@@ -106,12 +108,27 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     marginBottom: 40,
+    borderRadius: 400,
+    marginRight: 10,
+    borderWidth: 5,
+    borderColor: '#331507',
+    backgroundColor: 'white',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: '#0e4fdb', //byzantine blue
+    fontFamily: 'serif',
+
+  },
+  slogan: {
+    fontSize: 14,
+    fontWeight: 'bold',
     marginBottom: 20,
     color: '#0e4fdb', //byzantine blue
+    fontStyle: 'italic',
+    fontFamily: 'serif',
+
   },
   inputContainer: {
     width: '80%',

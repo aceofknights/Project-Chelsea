@@ -117,6 +117,13 @@ export default function HomePage() {
       const isFavorite = favorites.some((fav) => fav.key === item.key);
       const isApplied = appliedJobs.some((job) => job.key === item.key);
     
+      // Array of image sources
+      const images = ['work', 'work2', 'work3'];
+    
+      // Randomly select an index to pick an image
+      const randomIndex = Math.floor(Math.random() * images.length);
+      const selectedImage = images[randomIndex];
+    
       if (activeTab === 'Favorites' && !isFavorite) {
         return null; // Don't render non-favorite jobs in Favorites tab
       }
@@ -127,9 +134,10 @@ export default function HomePage() {
       return (
         <TouchableOpacity onPress={() => pressHandler(item)} style={styles.item}>
           <Image
-            source={require('../assets/work.jpg')}
+            source={selectedImage === 'work' ? require('../assets/work.jpg') :
+                    selectedImage === 'work2' ? require('../assets/work2.jpg') :
+                    require('../assets/work3.jpg')}
             style={styles.mainImage}
-            resizeMode="cover" // Stretch the image to cover the entire container
           />
           {/* Job details */}
           <View style={styles.jobDetailsContainer}>
@@ -166,6 +174,7 @@ export default function HomePage() {
         </TouchableOpacity>
       );
     };
+    
     
     
     

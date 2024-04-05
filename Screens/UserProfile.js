@@ -143,7 +143,7 @@ const UserProfile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fef4fo',
+    backgroundColor: '#FEF4F0',
   },
   header: {
     padding: 20,
@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: 16,
     marginBottom: 5,
-    color: '#331507',
+    color: 'blue',
   },
   editInput: {
     borderWidth: 1,

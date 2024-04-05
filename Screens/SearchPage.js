@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 20,
-
+    backgroundColor: '#FEF4F0',
   },
   inputContainer: {
     marginBottom: 20,

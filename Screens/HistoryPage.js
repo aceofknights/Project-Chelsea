@@ -120,7 +120,7 @@ const HistoryPage = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#fef4f0',
+    backgroundColor: '#FEF4F0',
   },
   incomeContainer: {
     marginBottom: 20,

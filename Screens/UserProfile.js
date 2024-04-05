@@ -32,7 +32,10 @@ const UserProfile = () => {
             <View style={styles.ratingContainer}>
               <Icon name="star" size={20} color="blue" style={styles.starIcon} />
               <Text style={styles.ratingText}>{rating}</Text>
+
             </View>
+            <Text style={styles.totalHours}>You've worked: {Math.floor(Math.random() * (500 - 25 + 1)) + 25} hours</Text>
+
           </View>
         </View>
         {editing ? (
@@ -183,6 +186,11 @@ const styles = StyleSheet.create({
   },
   starIcon: {
     elevation: 5,
+  },
+  totalHours: {
+    fontWeight: 'bold',
+    color: '#331507',
+    fontSize: 15,
   },
   editButton: {
     padding: 10,

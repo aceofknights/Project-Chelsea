@@ -18,7 +18,7 @@ const TabScreens = [
   { name: 'Home', component: HomePage, iconName: 'home' },
   { name: 'Profile', component: UserProfile, iconName: 'user' },
   { name: 'Search', component: SearchPage, iconName: 'search' },
-  { name: 'History', component: HistoryPage, iconName: 'dollar-sign' },
+  { name: 'Activity', component: HistoryPage, iconName: 'dollar-sign' },
   { name: 'Log-out', component: AuthStack, iconName: 'log-in' }, // Use AuthStack as a tab screen
 ];
 

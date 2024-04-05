@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 import { StatusBar, StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
-
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 //hooks for allowing values to be updated on screen
 //the useState hook allows the app to rerender something when an event happens

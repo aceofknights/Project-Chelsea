@@ -1,41 +1,53 @@
-import React, { useState } from 'react';
-import { ScrollView, View, Text, TextInput, Picker, CheckBox, Switch, Button, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, View, Text, Button, StyleSheet, Modal } from 'react-native';
 import moment from 'moment-timezone';
-import StarRating from './StarRating'; // Import your StarRating component
+import StarRating from './StarRating';
 
 const HistoryPage = () => {
   const [incomeType, setIncomeType] = useState('daily');
-  const [shifts, setShifts] = useState([
-    { id: 1, date: moment.tz('2023-11-05', 'UTC'), hoursWorked: 8, moneyEarned: 100 },
-    { id: 2, date: moment.tz('2023-11-17', 'UTC'), hoursWorked: 7, moneyEarned: 100 },
-    { id: 3, date: moment.tz('2023-11-29', 'UTC'), hoursWorked: 6, moneyEarned: 100 },
-    { id: 4, date: moment.tz('2023-12-10', 'UTC'), hoursWorked: 9, moneyEarned: 100 },
-    { id: 5, date: moment.tz('2023-12-23', 'UTC'), hoursWorked: 8, moneyEarned: 100 },
-    { id: 6, date: moment.tz('2024-01-04', 'UTC'), hoursWorked: 7, moneyEarned: 100 },
-    { id: 7, date: moment.tz('2024-01-16', 'UTC'), hoursWorked: 6, moneyEarned: 100 },
-    { id: 8, date: moment.tz('2024-01-28', 'UTC'), hoursWorked: 9, moneyEarned: 100 },
-    { id: 9, date: moment.tz('2024-02-08', 'UTC'), hoursWorked: 8, moneyEarned: 50 },
-    { id: 10, date: moment.tz('2024-02-20', 'UTC'), hoursWorked: 7, moneyEarned: 50 },
-    { id: 11, date: moment.tz('2024-02-28', 'UTC'), hoursWorked: 6, moneyEarned: 50 },
-    { id: 12, date: moment.tz('2024-02-29', 'UTC'), hoursWorked: 7, moneyEarned: 40 },
-    { id: 13, date: moment.tz('2024-03-01', 'UTC'), hoursWorked: 8, moneyEarned: 30 },
-    { id: 14, date: moment.tz('2024-03-02', 'UTC'), hoursWorked: 6, moneyEarned: 20 },
-    { id: 15, date: moment.tz('2024-03-03', 'UTC'), hoursWorked: 9, moneyEarned: 10 },
-    { id: 16, date: moment.tz('2024-04-01', 'UTC'), hoursWorked: 9, moneyEarned: 5 },
+  const [shifts, setShifts] = useState([]);
+  const [selectedShift, setSelectedShift] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [totalIncome, setTotalIncome] = useState(0); // State to store total income
 
-  ]);
+  useEffect(() => {
+    generateShifts();
+  }, []); // Empty dependency array to run only once on mount
 
-  //handler for button clicks to update what income type is
-  const handleIncomeTypeChange = (type) => {
-    setIncomeType(type);
+  useEffect(() => {
+    // Calculate total income whenever income type or shifts change
+    setTotalIncome(calculateIncome());
+  }, [incomeType, shifts]);
+
+  const generateShifts = () => {
+    const newShifts = [
+      { id: 1, date: moment.tz('2023-11-05', 'UTC'), hoursWorked: 8},
+    { id: 2, date: moment.tz('2023-11-17', 'UTC'), hoursWorked: 7},
+    { id: 3, date: moment.tz('2023-11-27', 'UTC'), hoursWorked: 8},
+    { id: 4, date: moment.tz('2023-12-10', 'UTC'), hoursWorked: 9},
+    { id: 5, date: moment.tz('2023-12-23', 'UTC'), hoursWorked: 8},
+    { id: 6, date: moment.tz('2024-01-04', 'UTC'), hoursWorked: 7},
+    { id: 7, date: moment.tz('2024-01-16', 'UTC'), hoursWorked: 6},
+    { id: 8, date: moment.tz('2024-01-28', 'UTC'), hoursWorked: 9},
+    { id: 9, date: moment.tz('2024-02-08', 'UTC'), hoursWorked: 8},
+    { id: 10, date: moment.tz('2024-02-20', 'UTC'), hoursWorked: 7},
+    { id: 11, date: moment.tz('2024-02-28', 'UTC'), hoursWorked: 6},
+    { id: 12, date: moment.tz('2024-02-29', 'UTC'), hoursWorked: 7},
+    { id: 13, date: moment.tz('2024-03-01', 'UTC'), hoursWorked: 8},
+    { id: 14, date: moment.tz('2024-03-02', 'UTC'), hoursWorked: 6},
+    { id: 15, date: moment.tz('2024-03-03', 'UTC'), hoursWorked: 9},
+    { id: 16, date: moment.tz('2024-04-01', 'UTC'), hoursWorked: 9},
+      // Add other shifts here...
+    ].map(shift => ({ ...shift, ...generateWagesAndTips() }));
+
+    setShifts(newShifts);
   };
 
-  const handleRateShift = (shiftId, rating) => {
-    // Update the rating of the shift with shiftId
-    const updatedShifts = shifts.map((shift) =>
-      shift.id === shiftId ? { ...shift, rating } : shift
-    );
-    setShifts(updatedShifts);
+  const generateWagesAndTips = () => {
+    const wages = Math.floor(Math.random() * 50) + 50;
+    const tips = Math.floor(Math.random() * 20);
+    const income = Math.floor(wages + tips);
+    return { wages, tips, income };
   };
 
   const calculateIncome = () => {
@@ -50,27 +62,24 @@ const HistoryPage = () => {
     } else if (incomeType === 'monthly') {
       const monthStart = moment().tz('UTC').startOf('month');
       const monthShifts = shifts.filter((shift) => shift.date.isBetween(monthStart, currentDate, null, '[]'));
-      totalIncome = monthShifts.reduce((acc, shift) => acc + shift.moneyEarned, 0);
+      totalIncome = monthShifts.reduce((acc, shift) => acc + shift.wages + shift.tips, 0);
     } else if (incomeType === 'yearly') {
       const yearStart = moment().tz('UTC').startOf('year');
       const yearShifts = shifts.filter((shift) => shift.date.isBetween(yearStart, currentDate, null, '[]'));
-      totalIncome = yearShifts.reduce((acc, shift) => acc + shift.moneyEarned, 0);
+      totalIncome = yearShifts.reduce((acc, shift) => acc + shift.wages + shift.tips, 0);
     }
+
     return totalIncome;
   };
 
   const calculateDailyIncome = (date) => {
     const currentShift = shifts.find((shift) => shift.date.isSame(date, 'day'));
-    if (currentShift) {
-      return currentShift.moneyEarned;
-    } else {
-      return 0; // Handle case where no shift exists for the day
-    }
+    return currentShift ? currentShift.wages + currentShift.tips : 0;
   };
 
   const calculateWeeklyIncome = (weekStart, weekEnd) => {
     const weekShifts = shifts.filter((shift) => shift.date.isBetween(weekStart, weekEnd, null, '[]') || shift.date.isSame(weekStart, 'day'));
-    const weeklyIncome = weekShifts.reduce((acc, shift) => acc + shift.moneyEarned, 0);
+    const weeklyIncome = weekShifts.reduce((acc, shift) => acc + shift.wages + shift.tips, 0);
     return weeklyIncome;
   };
 
@@ -81,7 +90,21 @@ const HistoryPage = () => {
     return lastSunday;
   };
 
-  const totalIncome = calculateIncome();
+  const handleIncomeTypeChange = (type) => {
+    setIncomeType(type);
+  };
+
+  const handleRateShift = (shiftId, rating) => {
+    const updatedShifts = shifts.map((shift) =>
+      shift.id === shiftId ? { ...shift, rating } : shift
+    );
+    setShifts(updatedShifts);
+  };
+
+  const handleShiftPress = (shift) => {
+    setSelectedShift(shift);
+    setModalVisible(true);
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -102,17 +125,36 @@ const HistoryPage = () => {
             <Text style={styles.shiftLabel}>Shift {shift.id}</Text>
             <Text>Date: {shift.date.format('YYYY-MM-DD')}</Text>
             <Text>Hours Worked: {shift.hoursWorked}</Text>
-            <Text>Money Earned: ${shift.moneyEarned}</Text>
+            <Text>Income Earned: ${shift.income}</Text>
             <Text>Rating:</Text>
             <StarRating
               rating={shift.rating}
               onRate={(rating) => handleRateShift(shift.id, rating)}
             />
+            <Button title="Details" onPress={() => handleShiftPress(shift)} />
           </View>
         ))
       ) : (
         <Text style={styles.emptyState}>No shifts available.</Text>
       )}
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Shift Details</Text>
+            <Text>Date: {selectedShift?.date.format('YYYY-MM-DD')}</Text>
+            <Text>Hours Worked: {selectedShift?.hoursWorked}</Text>
+            <Text>Wages Earned: ${selectedShift?.wages}</Text>
+            <Text>Tips Earned: ${selectedShift?.tips}</Text>
+          </View>
+          <Button title="Close" onPress={() => setModalVisible(false)} />
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -138,7 +180,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     color: 'green',
-
   },
   shiftContainer: {
     borderWidth: 1,
@@ -150,6 +191,27 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 5,
+  },
+  emptyState: {
+    textAlign: 'center',
+    marginTop: 20,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
 });
 

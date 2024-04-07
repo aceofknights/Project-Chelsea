@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, TextInput, Image, Text, View, TouchableOpacity, FlatList, Modal } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
@@ -9,12 +9,16 @@ import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from Expo vect
 export default function HomePage() {
   const navigation = useNavigation(); // Initialize navigation hook
 
-  const [jobs, setJobs] = useState(generateJobs());
+  const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const [showFavorites, setShowFavorites] = useState(false);
   const [appliedJobs, setAppliedJobs] = useState([]);
   const [activeTab, setActiveTab] = useState('NearMe');
+
+  useEffect(() => {
+    setJobs(generateJobs());
+  }, []);
 
   const pressHandler = (job) => {
     setSelectedJob(job);
@@ -57,8 +61,10 @@ export default function HomePage() {
 
   function generateJobs() {
     const generatedJobs = [];
+    const images = ['work', 'work2', 'work3'];
     for (let i = 1; i <= 10; i++) {
       const rating = (Math.random() * 4 + 1).toFixed(1);
+      const selectedImage = images[Math.floor(Math.random() * images.length)];
       const job = {
         name: `Job Role${i}`,
         key: `${i}`,
@@ -69,6 +75,7 @@ export default function HomePage() {
         desc:
           'Description of shift: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
         rating: rating,
+        image: selectedImage,
       };
       job.pay = (
         <Text>
@@ -101,9 +108,6 @@ export default function HomePage() {
   const renderJobItem = ({ item }) => {
     const isFavorite = favorites.some((fav) => fav.key === item.key);
     const isApplied = appliedJobs.some((job) => job.key === item.key);
-    const images = ['work', 'work2', 'work3'];
-    const randomIndex = Math.floor(Math.random() * images.length);
-    const selectedImage = images[randomIndex];
 
     if (activeTab === 'Favorites' && !isFavorite) {
       return null;
@@ -116,9 +120,9 @@ export default function HomePage() {
       <TouchableOpacity onPress={() => pressHandler(item)} style={styles.item}>
         <Image
           source={
-            selectedImage === 'work'
+            item.image === 'work'
               ? require('../assets/work.jpg')
-              : selectedImage === 'work2'
+              : item.image === 'work2'
               ? require('../assets/work2.jpg')
               : require('../assets/work3.jpg')
           }

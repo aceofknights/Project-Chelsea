@@ -56,8 +56,8 @@ const HomeTabNavigator = () => (
     })}
   >
     <Tab.Screen name="Home" component={HomeScreen} />
-    <Tab.Screen name="Profile" component={UserProfile} />
     <Tab.Screen name="Activity" component={HistoryPage} />
+    <Tab.Screen name="Profile" component={UserProfile} />
   </Tab.Navigator>
 );
 

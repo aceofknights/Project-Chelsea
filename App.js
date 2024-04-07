@@ -3,22 +3,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Tabs from './Tabs/BottomTab'; // Assuming Tabs contains the bottom tab navigator
 import 'react-native-gesture-handler';
-
+import Auth from './Tabs/AuthStack'
 // Import your screens here
 import CreateAccountPage from './Screens/createAccountPage';
 import LoginPage from './Screens/LoginPage'; // Make sure to import LoginPage as well
 
-const Stack = createNativeStackNavigator();
-
-function App() {
+export default function App(){
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }} />
-        {/* You can add other screens to this stack if needed */}
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+    <Auth />
+  )
 }
-
-export default App;

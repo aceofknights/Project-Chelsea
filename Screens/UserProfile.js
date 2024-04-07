@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Import the star and gear icons
 
 const UserProfile = () => {
@@ -23,7 +23,8 @@ const UserProfile = () => {
   };
 
   return (
-    <View style={styles.container}>
+    
+    <ScrollView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.profileContainer}>
           <Image source={profilePic} style={styles.profilePic} />
@@ -48,6 +49,8 @@ const UserProfile = () => {
           </TouchableOpacity>
         )}
       </View>
+
+
       {/* Location */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Location</Text>
@@ -137,7 +140,7 @@ const UserProfile = () => {
           </TouchableOpacity>
         )}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StatusBar, StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
+
 //hooks for allowing values to be updated on screen
 //the useState hook allows the app to rerender something when an event happens
 export default function LoginPage({ navigation}) {
@@ -13,7 +14,7 @@ export default function LoginPage({ navigation}) {
   //function is called when login button it pressed
   function handleLogin({}) {
     // Implement login functionality here
-    navigation.navigate('Home')
+    navigation.navigate('HomeScreen')
     console.log('Logging in with email:', email, 'and password:', password);
   };  
 

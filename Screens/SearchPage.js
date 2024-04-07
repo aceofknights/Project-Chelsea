@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, CheckBox, Modal, Button, Switch, ScrollView, StyleSheet, TouchableOpacity, Platform, DatePickerIOS, TimePickerAndroid } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker'; // Import Picker from the correct package
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
 
 
 const SearchPage = () => {
@@ -25,9 +26,11 @@ const SearchPage = () => {
   const [isPM, setIsPM] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState(false);
 
+  const navigation = useNavigation();
+
 
   const handleSearch = () => {
-    // Implement your search logic here
+    navigation.goBack(); // This will navigate back to the previous screen
   };
 
   const handleDateChange = (event, selectedDate) => {

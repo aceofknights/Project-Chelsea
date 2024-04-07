@@ -19,6 +19,8 @@ const AuthStack = () => (
       <Stack.Screen name="Login" component={LoginPage} />
       <Stack.Screen name="CreateAccountPage" component={CreateAccountPage} />
       <Stack.Screen name="HomeScreen" component={HomeTabNavigator} />
+      <Stack.Screen name="SearchPage" component={SearchPage} />
+      
     </Stack.Navigator>
   </NavigationContainer>
 );
@@ -45,7 +47,6 @@ const HomeTabNavigator = () => (
           case 'Search':
             iconName = 'search';
             break;
-
           default:
             iconName = 'log-in';
         }
@@ -55,9 +56,8 @@ const HomeTabNavigator = () => (
     })}
   >
     <Tab.Screen name="Home" component={HomeScreen} />
-    <Tab.Screen name="Profile" component={UserProfile} />
-    <Tab.Screen name="Search" component={SearchPage} />
     <Tab.Screen name="Activity" component={HistoryPage} />
+    <Tab.Screen name="Profile" component={UserProfile} />
   </Tab.Navigator>
 );
 

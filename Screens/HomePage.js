@@ -9,6 +9,9 @@ import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from Expo vect
 export default function HomePage() {
   const navigation = useNavigation(); // Initialize navigation hook
 
+  const [isApplyClicked, setIsApplyClicked] = useState(false);
+
+  
   const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [favorites, setFavorites] = useState([]);

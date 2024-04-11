@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'; // Import the star and gear icons
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
+
 
 const UserProfile = () => {
   const [name] = useState('Chelsea');
@@ -20,6 +22,14 @@ const UserProfile = () => {
   const handleSaveButton = () => {
     // Logic to save updated information
     setEditing(false);
+  };
+
+  const navigation = useNavigation(); // Initialize navigation hook
+
+  
+  const handleLogout = () => {
+    navigation.navigate('Login');
+
   };
 
   return (
@@ -48,6 +58,7 @@ const UserProfile = () => {
             <Icon name="gear" size={20} color="blue" />
           </TouchableOpacity>
         )}
+        
       </View>
 
 
@@ -140,6 +151,9 @@ const UserProfile = () => {
           </TouchableOpacity>
         )}
       </View>
+      <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+        <Text style={styles.buttonText}>Logout</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -150,6 +164,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FEF4F0',
+  },
+  logoutButton: {
+
   },
   header: {
     padding: 20,
@@ -237,6 +254,19 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: '#331507',
     fontSize: 16,
+  },
+  logoutButton: {
+    marginHorizontal: 5,
+    backgroundColor: '#ff6347', // Coral color
+    paddingVertical: 12,
+    paddingHorizontal: 40,
+    borderRadius: 25,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 

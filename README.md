@@ -39,3 +39,5 @@ The last option is to run this off your own device:
   For this option you will need to download Expo from the app store, Next you will need to be on the same network as the machine running the metro bundler. Scan the QR code with you device camera and it will open the project on your device.
 
 This applicaiton has been tested on a emulated google pixle 3, and a samsung galaxy 9 with success.
+
+Expo can be buggy at time so if it gets stuck on a loading screen completely close out of the app and restart the bundler by hitting control c in the terminal. This usally fixes any issues and make sure you are on the same network!!!!

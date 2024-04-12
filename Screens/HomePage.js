@@ -3,15 +3,11 @@ import { StyleSheet, TextInput, Image, Text, View, TouchableOpacity, FlatList, M
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
 import FlashMessage, { showMessage } from 'react-native-flash-message';
-import { SearchPage } from './SearchPage.js';
 import { Ionicons } from '@expo/vector-icons'; // Import Ionicons from Expo vector icons
 
 export default function HomePage() {
   const navigation = useNavigation(); // Initialize navigation hook
-
   const [isApplyClicked, setIsApplyClicked] = useState(false);
-
-  
   const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [favorites, setFavorites] = useState([]);
@@ -19,14 +15,17 @@ export default function HomePage() {
   const [appliedJobs, setAppliedJobs] = useState([]);
   const [activeTab, setActiveTab] = useState('NearMe');
 
+  // Fetch jobs data on component mount
   useEffect(() => {
     setJobs(generateJobs());
   }, []);
 
+  // function for job
   const pressHandler = (job) => {
     setSelectedJob(job);
   };
 
+  // function for add/remove favotires
   const favoriteHandler = (key) => {
     const job = jobs.find((item) => item.key === key);
     if (job) {
@@ -47,6 +46,7 @@ export default function HomePage() {
     }
   };
 
+  //apply button
   const applyHandler = () => {
     if (selectedJob) {
       setAppliedJobs([...appliedJobs, selectedJob]);
@@ -58,10 +58,12 @@ export default function HomePage() {
     setSelectedJob(null);
   };
 
+  //close button
   const closeModal = () => {
     setSelectedJob(null);
   };
 
+  //generates random job details for testing purposes
   function generateJobs() {
     const generatedJobs = [];
     const images = ['work', 'work2', 'work3'];
@@ -100,6 +102,7 @@ export default function HomePage() {
     return generatedJobs;
   }
 
+  //for unapplying to jobs
   const unapplyHandler = (key) => {
     setAppliedJobs(appliedJobs.filter((item) => item.key !== key));
     showMessage({
@@ -108,6 +111,7 @@ export default function HomePage() {
     });
   };
 
+  //function for know what jobs to render bases on what tap is selected
   const renderJobItem = ({ item }) => {
     const isFavorite = favorites.some((fav) => fav.key === item.key);
     const isApplied = appliedJobs.some((job) => job.key === item.key);
@@ -163,6 +167,7 @@ export default function HomePage() {
     );
   };
 
+  //currently just navigates to a search screen
   const handleSearch = () => {
     navigation.navigate('SearchPage');
   };
@@ -245,12 +250,6 @@ export default function HomePage() {
 }
 
 const styles = StyleSheet.create({
-    // linearGradient: {
-    //     flex: 1,
-    //     paddingLeft: 15,
-    //     paddingRight: 15,
-    //     borderRadius: 5
-    // },
     container: {
         flex: 1,
         paddingTop: 10,
@@ -272,7 +271,7 @@ const styles = StyleSheet.create({
     searchInput: {
       flex: 1,
       fontSize: 16,
-      paddingVertical: 10, // Adjust as needed for input padding
+      paddingVertical: 10, 
     },
     locationIcon: {
       marginLeft: 'auto',
@@ -282,7 +281,7 @@ const styles = StyleSheet.create({
     locationInput: {
       flex: 1,
       fontSize: 16,
-      paddingVertical: 10, // Adjust as needed for input padding
+      paddingVertical: 10, 
     },
     divider: {
       position: 'absolute',
@@ -290,8 +289,8 @@ const styles = StyleSheet.create({
       bottom: 0,
       width: 1,
       backgroundColor: 'brown',
-      left: '50%', // Move the divider to the middle horizontally
-      transform: [{ translateX: -0.5 }], // Move it back to the left by half of its own width
+      left: '50%', 
+      transform: [{ translateX: -0.5 }],
       zIndex: 2,
     },
   
@@ -334,8 +333,8 @@ const styles = StyleSheet.create({
       width: 350,
     },
     jobInfoContainer: {
-      flexDirection: 'row', // Arrange job name and restaurant name horizontally
-      alignItems: 'center', // Align items vertically
+      flexDirection: 'row', 
+      alignItems: 'center', 
     },
     jobName: {
         fontWeight: 'bold',
@@ -343,7 +342,7 @@ const styles = StyleSheet.create({
         color: '#331506',
     },
     restaurantName: {
-      marginLeft: 15, // Add some spacing between job name and restaurant name
+      marginLeft: 15, 
       position: 'relative',
     },
     text: {
@@ -366,12 +365,12 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     bookmarked: {
-      color: '#0e4fdb', // Blue color for bookmarked icon
-      size: 30, // Icon size
+      color: '#0e4fdb', 
+      size: 30, 
     },
     unbookmarked: {
-      color: '#331507', // brown color for unbookmarked icon
-      size: 30, // Icon size
+      color: '#331507', 
+      size: 30, 
     },
     favoriteButton: {
       position: 'absolute',
@@ -380,7 +379,7 @@ const styles = StyleSheet.create({
       borderRadius: 3,
       paddingVertical: 5,
       paddingHorizontal: 10,
-      marginLeft: 200, // Adjust as needed for spacing
+      marginLeft: 200, 
     },
 
     favoriteButtonText: {
@@ -390,7 +389,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black background
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', 
         padding: 20, 
     },
     
@@ -399,7 +398,7 @@ const styles = StyleSheet.create({
       borderWidth: 3, 
       borderColor: '#331507', 
       padding: 5, 
-      backgroundColor: '#cbc3c0', // Slightly darker background color
+      backgroundColor: '#cbc3c0', 
       elevation: 15,
     },
     modalContent: {
@@ -411,9 +410,9 @@ const styles = StyleSheet.create({
         
     },
     buttonsContainer: {
-      flexDirection: 'row', // Align items horizontally
-      justifyContent: 'space-between', // Space buttons evenly
-      paddingHorizontal: 20, // Add horizontal padding to the container
+      flexDirection: 'row', 
+      justifyContent: 'space-between',
+      paddingHorizontal: 20, 
 
     },
     closeButton: {

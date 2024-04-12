@@ -3,12 +3,13 @@ import { ScrollView, View, Text, Button, StyleSheet, Modal, Image } from 'react-
 import moment from 'moment-timezone';
 import StarRating from './StarRating';
 
-
+// BarChart component for displaying earnings breakdown
 const BarChart = ({ wages, tips, total }) => {
+    // Calculate percentages for wages and tips
   const totalEarnings = wages + tips;
   const wagesPercentage = (wages / totalEarnings) * 100;
   const tipsPercentage = (tips / totalEarnings) * 100;
-
+  // Render the bar chart with two bars representing wages and tips
   return (
     <View style={styles.barContainer}>
       <View style={[styles.bar, { flex: wagesPercentage / 100, marginRight: 0, backgroundColor: '#0e4fdb' }]} />
@@ -16,7 +17,7 @@ const BarChart = ({ wages, tips, total }) => {
     </View>
   );
 };
-
+// HistoryPage component for displaying shift history
 const HistoryPage = () => {
   const [incomeType, setIncomeType] = useState('daily');
   const [shifts, setShifts] = useState([]);
@@ -24,18 +25,22 @@ const HistoryPage = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [totalIncome, setTotalIncome] = useState(0); // State to store total income
 
+  // Generate initial shifts on component mount
   useEffect(() => {
     generateShifts();
   }, []); // Empty dependency array to run only once on mount
 
+    // Recalculate total income when income type or shifts change
   useEffect(() => {
     // Calculate total income whenever income type or shifts change
     setTotalIncome(calculateIncome());
   }, [incomeType, shifts]);
 
+    // Generate sample shifts data
   const generateShifts = () => {
+        // Sample data for shifts
     const newShifts = [
-      { id: 1, date: moment.tz('2023-11-05', 'UTC'), hoursWorked: 8},
+    { id: 1, date: moment.tz('2023-11-05', 'UTC'), hoursWorked: 8},
     { id: 2, date: moment.tz('2023-11-17', 'UTC'), hoursWorked: 7},
     { id: 3, date: moment.tz('2023-11-27', 'UTC'), hoursWorked: 8},
     { id: 4, date: moment.tz('2023-12-10', 'UTC'), hoursWorked: 9},
@@ -61,13 +66,12 @@ const HistoryPage = () => {
     { id: 24, date: moment.tz('2024-04-25', 'UTC'), hoursWorked: 8},
     { id: 25, date: moment.tz('2024-04-29', 'UTC'), hoursWorked: 7},
     { id: 26, date: moment.tz('2024-04-30', 'UTC'), hoursWorked: 9},
-
-      // Add other shifts here...
     ].map(shift => ({ ...shift, ...generateWagesAndTips() }));
-
+    // Set generated shifts to state
     setShifts(newShifts);
   };
 
+    // Generate random wages and tips for a shift
   const generateWagesAndTips = () => {
     const wages = Math.floor(Math.random() * 50) + 50;
     const tips = Math.floor(Math.random() * 20);
@@ -75,6 +79,7 @@ const HistoryPage = () => {
     return { wages, tips, income };
   };
 
+    // Calculate total income based on income type
   const calculateIncome = () => {
     let totalIncome = 0;
     const currentDate = moment().tz('UTC').startOf('day');
@@ -97,17 +102,20 @@ const HistoryPage = () => {
     return totalIncome;
   };
 
+    // Calculate daily income for a specific date
   const calculateDailyIncome = (date) => {
     const currentShift = shifts.find((shift) => shift.date.isSame(date, 'day'));
     return currentShift ? currentShift.wages + currentShift.tips : 0;
   };
 
+    // Calculate weekly income for a specific week
   const calculateWeeklyIncome = (weekStart, weekEnd) => {
     const weekShifts = shifts.filter((shift) => shift.date.isBetween(weekStart, weekEnd, null, '[]') || shift.date.isSame(weekStart, 'day'));
     const weeklyIncome = weekShifts.reduce((acc, shift) => acc + shift.wages + shift.tips, 0);
     return weeklyIncome;
   };
 
+    // Get the date of the previous Sunday from a given date
   const getPreviousSunday = (date) => {
     const today = new Date();
     const dayOfWeek = today.getDay();
@@ -115,10 +123,12 @@ const HistoryPage = () => {
     return lastSunday;
   };
 
+    // Handle change in income type
   const handleIncomeTypeChange = (type) => {
     setIncomeType(type);
   };
 
+  // Handle rating change for a shift
   const handleRateShift = (shiftId, rating) => {
     const updatedShifts = shifts.map((shift) =>
       shift.id === shiftId ? { ...shift, rating } : shift
@@ -126,11 +136,13 @@ const HistoryPage = () => {
     setShifts(updatedShifts);
   };
 
+  // Handle press on a shift item
   const handleShiftPress = (shift) => {
     setSelectedShift(shift);
     setModalVisible(true);
   };
 
+  // Render the component
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.incomeContainer}>

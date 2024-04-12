@@ -1,7 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Text, Button, StyleSheet, Modal } from 'react-native';
+import { ScrollView, View, Text, Button, StyleSheet, Modal, Image } from 'react-native';
 import moment from 'moment-timezone';
 import StarRating from './StarRating';
+
+
+const BarChart = ({ wages, tips, total }) => {
+  const totalEarnings = wages + tips;
+  const wagesPercentage = (wages / totalEarnings) * 100;
+  const tipsPercentage = (tips / totalEarnings) * 100;
+
+  return (
+    <View style={styles.barContainer}>
+      <View style={[styles.bar, { flex: wagesPercentage / 100, marginRight: 0, backgroundColor: '#0e4fdb' }]} />
+      <View style={[styles.bar, { flex: tipsPercentage / 100, marginLeft: 0, backgroundColor: '#ef8833' }]} />
+    </View>
+  );
+};
 
 const HistoryPage = () => {
   const [incomeType, setIncomeType] = useState('daily');
@@ -37,6 +51,17 @@ const HistoryPage = () => {
     { id: 14, date: moment.tz('2024-03-02', 'UTC'), hoursWorked: 6},
     { id: 15, date: moment.tz('2024-03-03', 'UTC'), hoursWorked: 9},
     { id: 16, date: moment.tz('2024-04-01', 'UTC'), hoursWorked: 9},
+    { id: 17, date: moment.tz('2024-04-01', 'UTC'), hoursWorked: 9},
+    { id: 18, date: moment.tz('2024-04-05', 'UTC'), hoursWorked: 9},
+    { id: 19, date: moment.tz('2024-04-08', 'UTC'), hoursWorked: 6},
+    { id: 20, date: moment.tz('2024-04-11', 'UTC'), hoursWorked: 7},
+    { id: 21, date: moment.tz('2024-04-15', 'UTC'), hoursWorked: 8},
+    { id: 22, date: moment.tz('2024-04-17', 'UTC'), hoursWorked: 8},
+    { id: 23, date: moment.tz('2024-04-22', 'UTC'), hoursWorked: 7},
+    { id: 24, date: moment.tz('2024-04-25', 'UTC'), hoursWorked: 8},
+    { id: 25, date: moment.tz('2024-04-29', 'UTC'), hoursWorked: 7},
+    { id: 26, date: moment.tz('2024-04-30', 'UTC'), hoursWorked: 9},
+
       // Add other shifts here...
     ].map(shift => ({ ...shift, ...generateWagesAndTips() }));
 
@@ -138,7 +163,7 @@ const HistoryPage = () => {
         <Text style={styles.emptyState}>No shifts available.</Text>
       )}
 
-      <Modal
+<Modal
         animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -146,11 +171,29 @@ const HistoryPage = () => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Shift Details</Text>
-            <Text>Date: {selectedShift?.date.format('YYYY-MM-DD')}</Text>
-            <Text>Hours Worked: {selectedShift?.hoursWorked}</Text>
-            <Text>Wages Earned: ${selectedShift?.wages}</Text>
-            <Text>Tips Earned: ${selectedShift?.tips}</Text>
+          <Text style={styles.modalTitle}>Shift Details</Text>
+          <Text style={styles.resturantText}>Restaurant Name</Text>
+          <Image
+        source={
+          selectedShift?.image === 'work'
+            ? require('../assets/work.jpg')
+            : selectedShift?.image === 'work2'
+            ? require('../assets/work2.jpg')
+            : require('../assets/work3.jpg')
+        }
+        style={styles.mainImage}
+      />
+            <View style={styles.divider} />
+            <Text style={styles.modalText}>Date: {selectedShift?.date.format('YYYY-MM-DD')}</Text>
+            <View style={styles.divider} />
+            <Text style={styles.modalText}>Hours Worked: {selectedShift?.hoursWorked}</Text>
+            <View style={styles.divider} />
+            <Text style={styles.wagesText}>Wages Earned: ${selectedShift?.wages}</Text>
+            <View style={styles.divider} />
+            <Text style={styles.tipsText}>Tips Earned: ${selectedShift?.tips}</Text>
+            <View style={styles.divider} />
+
+            <BarChart wages={selectedShift?.wages} tips={selectedShift?.tips} total={totalIncome} />
           </View>
           <Button title="Close" onPress={() => setModalVisible(false)} />
         </View>
@@ -163,6 +206,11 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     backgroundColor: '#FEF4F0',
+  },
+  mainImage: {
+    borderRadius: 20,
+    height: 160,
+    width: 350,
   },
   incomeContainer: {
     marginBottom: 20,
@@ -209,9 +257,46 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalTitle: {
+    textAlign: 'center',
+    fontSize: 27,
+    fontWeight: 'bold',
+    marginBottom: 10,
+  },
+  resturantText: {
+    textAlign: 'center',
+
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
+  },
+  divider: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    marginBottom: 10,
+  },
+  modalText:
+  {
+    textAlign: 'center',
+    fontSize: 18,
+  },
+  tipsText:{
+    textAlign: 'center',
+    color: '#ef8833',
+    fontSize: 18,
+  },
+  wagesText: {
+    textAlign: 'center',
+    color: "#0e4fdb",
+    fontSize: 18,
+  },
+  barContainer: {
+    flexDirection: 'row',
+    height: 20,
+    marginBottom: 10,
+  },
+  bar: {
+    marginRight: 5,
+    borderRadius: 5,
   },
 });
 

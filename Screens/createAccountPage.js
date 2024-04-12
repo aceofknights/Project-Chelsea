@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   createButton: {
-    backgroundColor: 'orange',
+    backgroundColor: '#ef8833',
     borderRadius: 5,
     paddingVertical: 12,
     alignItems: 'center',

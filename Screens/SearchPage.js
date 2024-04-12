@@ -269,7 +269,7 @@ export default SearchPage;
 
 const styles = StyleSheet.create({
   searchButton: {
-    backgroundColor: 'orange',
+    backgroundColor: '#ef8833',
     borderRadius: 5,
     paddingVertical: 10,
     alignItems: 'center',

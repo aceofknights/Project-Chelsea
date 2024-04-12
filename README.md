@@ -27,6 +27,7 @@ using github desktop theres a button to do this.
 step 6 start the metro bundler
 run the command npm -start in a new terminal to begin the metro bundler this will start a local server hosting the application you will see a bunch of code fly by in the terminal and a qr code will be genereated
 
+# Running the application
 From here you have 3 different option to see the application running: opening the app in a local window, running a emulated mobile device, or running it on your own device
 
 The easiest option is the windows:

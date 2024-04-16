@@ -4,6 +4,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker'; // Import Picker from the correct package
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
 
+//search page is just a preview of what the search should look like
+//currently doesnt actually search anything 
 
 const SearchPage = () => {
   const [zipcode, setZipcode] = useState('');
@@ -33,12 +35,14 @@ const SearchPage = () => {
     navigation.goBack(); // This will navigate back to the previous screen
   };
 
+  //function for date picker
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShowDatePicker(Platform.OS === 'ios');
     setDate(currentDate);
   };
 
+  //shows date picker
   const showDatepicker = () => {
     setShowDatePicker(true);
   };
@@ -269,7 +273,7 @@ export default SearchPage;
 
 const styles = StyleSheet.create({
   searchButton: {
-    backgroundColor: 'orange',
+    backgroundColor: '#ef8833',
     borderRadius: 5,
     paddingVertical: 10,
     alignItems: 'center',

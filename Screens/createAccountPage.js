@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
+// Define the CreateAccountPage component
 const CreateAccountPage = ({ navigation }) => {
+  // Define state variables for user inputs
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -9,14 +11,17 @@ const CreateAccountPage = ({ navigation }) => {
   const [address, setAddress] = useState('');
   const [jobRole, setJobRole] = useState('');
 
+  // Function to handle the creation of an account
   const handleCreateAccount = () => {
     // Logic to create the account goes here
     // For now, just navigate back to the login page
     navigation.goBack();
   };
 
+  // Render the component
   return (
     <View style={styles.container}>
+      {/* Email input field */}
       <Text style={styles.label}>Email</Text>
       <TextInput
         style={styles.input}
@@ -25,6 +30,7 @@ const CreateAccountPage = ({ navigation }) => {
         onChangeText={setEmail}
       />
       
+      {/* Password input field */}
       <Text style={styles.label}>Password</Text>
       <TextInput
         style={styles.input}
@@ -34,6 +40,7 @@ const CreateAccountPage = ({ navigation }) => {
         secureTextEntry // Hide password input
       />
       
+      {/* Full name input field */}
       <Text style={styles.label}>Full Name</Text>
       <TextInput
         style={styles.input}
@@ -42,6 +49,7 @@ const CreateAccountPage = ({ navigation }) => {
         onChangeText={setName}
       />
 
+      {/* Date of birth input field */}
       <Text style={styles.label}>Date of Birth</Text>
       <TextInput
         style={styles.input}
@@ -50,6 +58,7 @@ const CreateAccountPage = ({ navigation }) => {
         onChangeText={setDob}
       />
 
+      {/* Address input field */}
       <Text style={styles.label}>Address</Text>
       <TextInput
         style={styles.input}
@@ -58,6 +67,7 @@ const CreateAccountPage = ({ navigation }) => {
         onChangeText={setAddress}
       />
 
+      {/* Job role input field */}
       <Text style={styles.label}>Job Role</Text>
       <TextInput
         style={styles.input}
@@ -66,6 +76,7 @@ const CreateAccountPage = ({ navigation }) => {
         onChangeText={setJobRole}
       />
 
+      {/* Button to create account */}
       <TouchableOpacity style={styles.createButton} onPress={handleCreateAccount}>
         <Text style={styles.createButtonText}>Create Account</Text>
       </TouchableOpacity>
@@ -73,6 +84,7 @@ const CreateAccountPage = ({ navigation }) => {
   );
 };
 
+// Define styles for the component
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -92,7 +104,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   createButton: {
-    backgroundColor: 'orange',
+    backgroundColor: '#ef8833',
     borderRadius: 5,
     paddingVertical: 12,
     alignItems: 'center',

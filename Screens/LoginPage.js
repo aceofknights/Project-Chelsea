@@ -1,55 +1,47 @@
-import React, { useState } from 'react';
-import { StatusBar, StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Image } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
+import React, { useState } from 'react'; // Import React and useState hook
+import { StatusBar, StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Image } from 'react-native'; // Import necessary components from react-native
+import { FontAwesome } from '@expo/vector-icons'; // Import FontAwesome from Expo vector icons
 
+export default function LoginPage({ navigation}) { // Define LoginPage component with navigation prop
+  const [email, setEmail] = useState(''); // State for email input field
+  const [password, setPassword] = useState(''); // State for password input field
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [showCreateAccount, setShowCreateAccount] = useState(false); // State to toggle account creation visibility
 
-//hooks for allowing values to be updated on screen
-//the useState hook allows the app to rerender something when an event happens
-export default function LoginPage({ navigation}) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [showCreateAccount, setShowCreateAccount] = useState(false);
-
-  //function is called when login button it pressed
-  function handleLogin({}) {
-    // Implement login functionality here
-    navigation.navigate('HomeScreen')
-    console.log('Logging in with email:', email, 'and password:', password);
-  };  
-
+  // currently with no real auth in place this is just a navigation screen
+  // in the future this navigation will need to be handled differently for security reason
   
 
-  function handleAccount({}) {
-    navigation.navigate('CreateAccountPage') // Navigate to CreateAccountPage
-
+  // Function to handle login
+  function handleLogin({}) { 
+    navigation.navigate('HomeScreen'); // Navigate to HomeScreen
+    console.log('Logging in with email:', email, 'and password:', password); // Log login attempt with email and password
   }
 
-   // this looks different but this is just another way to do a function it works just like the one above but is called when forgot email is clicked
-  const handleForgotEmail = () => {
-    Alert.alert('Forgot Email', 'Please contact support for assistance with your email.');
-    console.log('Forgot Email', 'Please contact support for assistance with your email.');
+  // Function to handle account creation navigation
+  function handleAccount({}) { 
+    navigation.navigate('CreateAccountPage'); // Navigate to CreateAccountPage
+  }
 
+  // Function to handle forgot email action
+  const handleForgotEmail = () => { 
+    Alert.alert('Forgot Email', 'Please contact support for assistance with your email.'); // Show alert for forgot email
+    console.log('Forgot Email', 'Please contact support for assistance with your email.'); // Log forgot email action
+  };
+  // Function to handle forgot password action
+  const handleForgotPassword = () => { 
+    Alert.alert('Forgot Password', 'Please check your email for instructions on resetting your password.'); // Show alert for forgot password
+    console.log('Forgot Password', 'Please check your email for instructions on resetting your password.'); // Log forgot password action
   };
 
-  //see above
-  const handleForgotPassword = () => {
-    Alert.alert('Forgot Password', 'Please check your email for instructions on resetting your password.');
-    console.log('Forgot Password', 'Please check your email for instructions on resetting your password.');
-
-  };
-
-
-  //the <view></view> tags work just like <div></div> tags in html
-  //wrapping items in view tags and giving them a style make them easy to add style to
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Project Chelsea</Text>
       <Text style={styles.slogan}>Shift the way you work</Text>
 
       <Image
-        source={require('../assets/dog picture.png')}
-        style={styles.image}
+        source={require('../assets/dog picture.png')} // Image component with source for the image
+        style={styles.image} // Apply styles to image
       />
       <View style={styles.inputContainer}>
         <View style={styles.inputWrapper}>

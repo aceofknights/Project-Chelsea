@@ -13,6 +13,7 @@ import HistoryPage from '../Screens/HistoryPage';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+// AuthStack component containing the authentication flow
 const AuthStack = () => (
   <NavigationContainer>
     <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
@@ -25,6 +26,7 @@ const AuthStack = () => (
   </NavigationContainer>
 );
 
+// HomeTabNavigator component containing the bottom tab navigation
 const HomeTabNavigator = () => (
   <Tab.Navigator 
     initialRouteName="Home" 
@@ -37,12 +39,15 @@ const HomeTabNavigator = () => (
         switch (route.name) {
           case 'Home':
             iconName = 'home';
+            color= focused ? 'orange' : 'black';
             break;
           case 'Activity':
             iconName = 'dollar-sign';
+            color= focused ? 'orange' : 'black';
             break;            
           case 'Profile':
             iconName = 'user';
+            color= focused ? 'orange' : 'black';
             break;
           case 'Search':
             iconName = 'search';

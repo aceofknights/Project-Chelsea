@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Feather } from '@expo/vector-icons'; // Assuming you are using Feather icons
+import { Feather } from '@expo/vector-icons'; 
 import LoginPage from '../Screens/LoginPage';
 import CreateAccountPage from '../Screens/createAccountPage';
 import HomeScreen from '../Screens/HomePage';
@@ -13,6 +13,7 @@ import HistoryPage from '../Screens/HistoryPage';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+// AuthStack component containing the authentication flow
 const AuthStack = () => (
   <NavigationContainer>
     <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
@@ -25,6 +26,7 @@ const AuthStack = () => (
   </NavigationContainer>
 );
 
+// HomeTabNavigator component containing the bottom tab navigation
 const HomeTabNavigator = () => (
   <Tab.Navigator 
     initialRouteName="Home" 
@@ -37,15 +39,15 @@ const HomeTabNavigator = () => (
         switch (route.name) {
           case 'Home':
             iconName = 'home';
+            color= focused ? 'orange' : 'black';
             break;
           case 'Activity':
             iconName = 'dollar-sign';
+            color= focused ? 'orange' : 'black';
             break;            
           case 'Profile':
             iconName = 'user';
-            break;
-          case 'Search':
-            iconName = 'search';
+            color= focused ? 'orange' : 'black';
             break;
           default:
             iconName = 'log-in';

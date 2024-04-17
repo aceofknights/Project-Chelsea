@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Feather } from '@expo/vector-icons'; // Assuming you are using Feather icons
+import { Feather } from '@expo/vector-icons'; 
 import LoginPage from '../Screens/LoginPage';
 import CreateAccountPage from '../Screens/createAccountPage';
 import HomeScreen from '../Screens/HomePage';
@@ -48,9 +48,6 @@ const HomeTabNavigator = () => (
           case 'Profile':
             iconName = 'user';
             color= focused ? 'orange' : 'black';
-            break;
-          case 'Search':
-            iconName = 'search';
             break;
           default:
             iconName = 'log-in';
